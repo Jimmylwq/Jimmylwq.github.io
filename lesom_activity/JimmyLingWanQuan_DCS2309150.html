@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    table{
+      background-color: antiquewhite;
+      text-align: center;
+      padding:40px;
+    }
+  </style>
+</head>
+<body>
+  <table id="students" cellpadding="10px" style="text-align: left;">
+    <thead>
+      <tr>
+        <th>Student_name</th>
+        <th>Age</th>
+        <th>Student_ID</th>
+        <th>Course</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // create a Xml DOM
+    //let is give the variable a value,always use in JavaScript
+    //This xmlContent is a variable and in here it's used to store the XML data. ''is meaning word in '' is xmlcontent. When i want to put the xml name or others name, the name must have ''
+    let xmlContent = '';
+    //let tableStudent reference the table id 'students'
+    //document is the Document Object Model (DOM) object representing the web page. It provides access to the HTML content of the page.
+    //getElementById('students') is get the information from id='students'
+    let tableStudents = document.getElementById('students');
+    //connet the xml file,i want it function response
+    fetch('students.xml').then((response) => {
+      //i want to get the text from the Xml, also this link is connect with the fetch('')
+      response.text().then((xml) => {
+        // get the information from XML and give to xmlContent
+        xmlContent = xml;
+        //This code creates an instance of the DOMParser, which is used to parse the XML data.
+        let parser = new DOMParser();
+        //Here, the XML data (stored in xmlContent) is parsed by the DOMParser, and the result is stored in the xmlDOM variable. The 'application/xml' argument specifies the type of the data being parsed.
+        let xmlDOM = parser.parseFromString(xmlContent, 'application/xml');
+        let students = xmlDOM.querySelectorAll('student'); // Selecting 'student' elements directly
+        //let the 'students' loop ,so we can add studentname, age,studentid, utill couser
+        students.forEach(studentXmlNode => {
+          //Inside the loop, this line creates a new table row element <tr> that will be used to add student information to the HTML table.
+          let row = document.createElement("tr");
+          //let td = document.createElement("td"); is used to create a new HTML table cell element <td> and add the student's name information to that cell.
+          //studentXmlNode.querySelector("student_name").textContent; is get the student name from the XML file
+          // student_name
+          let td = document.createElement("td");
+          td.textContent = studentXmlNode.querySelector("student_name").textContent;
+          row.appendChild(td);
+
+          // age
+          td = document.createElement("td");
+          td.textContent = studentXmlNode.querySelector("age").textContent;
+          row.appendChild(td);
+
+          // student_ID
+          td = document.createElement("td");
+          td.textContent = studentXmlNode.querySelector("student_ID").textContent;
+          row.appendChild(td);
+
+          // course
+          td = document.createElement("td");
+          td.textContent = studentXmlNode.querySelector("course").textContent;
+          row.appendChild(td);
+            // is used to add a new row <tr> to an HTML table within your document. =
+          tableStudents.querySelector("tbody").appendChild(row);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <table id="students" cellpadding="10px" style="text-align: left;">
+    <thead>
+      <tr>
+        <th>student_name</th>
+        <th>age</th>
+        <th>student_ID</th>
+        <th>course</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    let xmlContent ='';
+    let tableStudents = document.getElementById('students')
+    fetch('students.xml').then((response) =>{
+      response.text().then((xml) => {
+        xmlContent = xml;
+        let parser = new DOMParser();
+        let xmlDOM = parser.parseFromString(xmlContent,'application/xml');
+        let students = xmlDOM.querySelectorAll('students');
+        books.forEach(bookXmlNode => {
+        let row = document.createElement("tr");
+
+        //student_name
+        let td = document.createElement("td")
+        td.innerText = bookXmlNode.children[0].innerHTML;
+        row.appendChild(td);
+        //age
+        td = document.createElement("td")
+        td.innerText = bookXmlNode.children[1].innerHTML;
+        row.appendChild(td2);
+        //student_id
+        td = document.createElement("td")
+        td.innerText = bookXmlNode.children[3].innerHTML;
+        row.appendChild(td3);
+        //course
+        td = document.createElement("td")
+        td.innerText = bookXmlNode.children[5].innerHTML;
+        row.appendChild(td);
+
+        tableStudents.children[1].appendChild(row);
+
+      });
+      });
+    });
+  </script>
+</body>
+</html>-->
+
+
+
