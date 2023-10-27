@@ -35,7 +35,7 @@
     //getElementById('students') is get the information from id='students'
     let tableStudents = document.getElementById('students');
     //connet the xml file,i want it function response
-    fetch('students.xml').then((response) => {
+    fetch('https://jimmylwq.github.io/lesom_activity/students.xml').then((response) => {
       //i want to get the text from the Xml, also this link is connect with the fetch('')
       response.text().then((xml) => {
         // get the information from XML and give to xmlContent
