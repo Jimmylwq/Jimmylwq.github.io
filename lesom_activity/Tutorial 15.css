@@ -1,0 +1,64 @@
+body{
+    margin-top: 100px;
+    margin-left: 50px;
+    text-align: center;
+    background-repeat: cover ;
+    background-size: 100%;
+    background-attachment: fixed;
+
+    background-image:url(https://static.vecteezy.com/system/resources/previews/000/241/525/original/beautiful-colorful-watercolor-background-vector.jpg);
+}
+img{
+    text-align: center;
+    height: 150px;
+    width: 150px;
+}
+
+hr{
+    color: orange;
+    width: 50%;
+    height: 5px;
+    font-size: 70%;
+
+
+}
+
+h1{
+    text-align: center;
+    font-family:"Lucida Console", "Courier New", monospace;
+    font-size: 30px;
+    color:white;
+    text-shadow: 2px 2px 4px #000000;
+
+}
+
+table{
+    text-align: center;
+    background-color: rgb(244, 192, 201);
+    border:10px;
+    border-collapse: collapse;
+    
+}
+
+table tr th{
+
+    background-color: rgb(230, 77, 103);
+    height: 100px;
+    font-size: 20px;
+}
+
+table tr td{
+    font-family:'Times New Roman', Times, serif;
+    background-color: rgb(231, 178, 108);
+    height: 50px;
+    padding: 10px;
+    transition: transform 0.2s;
+}
+
+table tr td:hover{
+    font-family:'Times New Roman', Times, serif;
+    background-color: rgb(244, 192, 201);
+    height: 50px;
+    padding: 10px;
+    transform: scale(1.2);
+}
