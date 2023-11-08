@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Tutorial 17.css">
+    <title>Document</title>
+</head>
+<body topmargin="50">
+    <center><form>
+        <!--<p style="background-color: powderblue; color: #696969; font-family: 160%; text-align: center; width: 80%; height: 100%;"></p>-->
+        <table border="0" cellpadding="4" cellspacing="5" style="border-collapse: collapse;" >
+        <tr><td colspan="2"><h1>Personal Details</h1></td></tr>
+        <!--Normal Input code-->
+        <tr>
+        <td>Frist Name:</td>
+        <td><input type="text name=fname"></td></tr>
+
+        <tr>
+        <td>Last Name:</td>
+        <td><input type="text name=lname"></td></tr>
+        
+        <tr>
+        <td>Gender:</td>
+        <!--radio is for to choose 1-->
+        <td><input type = radio name="gender" value="Male>Male">Male
+        <input type = radio name="gender" value="Female>Female">Female</tr>
+        
+        <tr>
+        <td>Choose Your favourte subject:<br></td>
+        <!--we can choose what we want-->
+        <td  align="center"="5%"><input type=checkbox name=fav_sub value=DCS4103>DCS4103
+        <input type=checkbox name=fav_sub value=DCS3003>DCS3003
+        <input type=checkbox name=fav_sub value=MST1003>MST1003
+        <input type=checkbox name=fav_sub value=MST2003>MST2003</td></tr>
+        <br>
+
+        <tr>
+        <td>Address:</td>
+        <!--size for the text box-->
+        <td><textarea rows="4" cols="30" name="Address"></textarea></td></tr>
+        <br>
+
+        <tr>
+        <td>Date of Birth:</td>
+        <!--date-->
+        <td><input type="date" name="dob"></td></tr>
+        <br>
+
+        <tr>
+        <td>Login password:</td>
+
+        <!--password-->
+        <td><input type="password" name="Loginpass"></td></tr>
+        <br>
+
+        <tr>
+        <td>Course:</td>
+        <!--selected like default-->
+        <td><select>
+            <option value="0" >- List of Courses -</option>
+            <option optgroup label="Diploma In Computer Science">
+                <option value="DCS_S1">Semester 1</option>
+                <option value="DCS_S2">Semester 2</option>
+                <option value="DCS_S3">Semester 3</option>
+                <option value="DCS_S4">Semester 4</option>
+                <option value="DCS_S5">Semester 5</option>
+                <option value="DCS_S6">Semester 6</option>
+                </option>
+                                
+            <option value="DIB">Diploma In Bussiness</option>
+            <option value="DAS">Diploma In Airline Services</option>
+        </select></td></tr>
+      
+
+        <tr><td></td></tr>
+        <tr>
+        <td colspan="2"><button class="special" type="submit" value="Submit">SUBMIT</button>&nbsp; &nbsp;
+        <button class="special" type="reset" value="Reset">RESET</button></td>
+        </tr>
+        
+        </table>
+        
+    </form></center>
+      
+    
+</body>
+</html>
