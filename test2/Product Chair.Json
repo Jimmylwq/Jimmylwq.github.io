@@ -2,55 +2,55 @@
     {
         "id":10,
         "name": "Animal Sheep Chair",
-        "image": "Chair/2)Animal Sheep Chair.webp",
+        "image": "2)Animal Sheep Chair.webp",
         "price": 180
     },
     {
         "id":11,
         "name": "Desk Chair",
-        "image": "Chair/2)Desk Chair.webp",
+        "image": "2)Desk Chair.webp",
         "price": 899
     },
     {
         "id":12,
         "name": "Gaming Chair",
-        "image": "Chair/2)Gamimg Chair.webp",
+        "image": "2)Gamimg Chair.webp",
         "price": 1000
     },
     {
         "id":13,
         "name": "Ghost Chair",
-        "image": "Chair/2)Ghost Chair.jpg",
+        "image": "2)Ghost Chair.jpg",
         "price": 120
     },
     {
         "id":14,
         "name": "Lounge Chair",
-        "image": "Chair/2)Lounge Chair.webp",
+        "image": "2)Lounge Chair.webp",
         "price": 900
     },
     {
         "id":15,
         "name": "Match Storage Bench Chair",
-        "image": "Chair/2)Match Storage Bench Chair.jpeg",
+        "image": "2)Match Storage Bench Chair.jpeg",
         "price": 450
     },
     {
         "id":16,
         "name": "Side chair",
-        "image": "Chair/2)Side chair.png",
+        "image": "2)Side chair.png",
         "price": 150
     },
     {
         "id":17,
         "name": "Slipper Chair",
-        "image": "Chair/2)Slipper Chair1.jpg",
+        "image": "2)Slipper Chair1.jpg",
         "price": 600
     },
     {
         "id":18,
         "name": "wishbone chair.webp",
-        "image": "Chair/2)wishbone chair.webp",
+        "image": "2)wishbone chair.webp",
         "price": 200
     }
 ]
