@@ -2,109 +2,109 @@
     {
         "id": 1,
         "name": "2 Door Sliding Wadrode",
-        "image": "Cabinat/1)2 Door Sliding Wadrode.webp",
+        "image": "1)2 Door Sliding Wadrode.webp",
         "price": 600
     },
     {
         "id": 2,
         "name": "2 Door Wadrode",
-        "image": "Cabinat/1)2 Door Wadrode.jpg",
+        "image": "1)2 Door Wadrode.jpg",
         "price": 699
     },
     {
         "id": 3,
         "name": "Display  cabinet",
-        "image": "Cabinat/1)Display  cabinet.jpeg",
+        "image": "1)Display  cabinet.jpeg",
         "price": 899
     },
     {
         "id": 4,
         "name": "Display wall - mounted cabinet",
-        "image": "Cabinat/1)Display wall - mounted cabinet.jpeg",
+        "image": "1)Display wall - mounted cabinet.jpeg",
         "price": 1050
     },
     {
         "id": 5,
         "name": "Multi Cabinat",
-        "image": "Cabinat/1)Multi Cabinat.webp",
+        "image": "1)Multi Cabinat.webp",
         "price": 500
     },
     {
         "id": 6,
         "name": "Shoe cabinet with drawer",
-        "image": "Cabinat/1)Shoe cabinet with drawer.webp",
+        "image": "1)Shoe cabinet with drawer.webp",
         "price": 399
     },
     {
         "id": 7,
         "name": "Sliding Barn Door Accent Cabinet",
-        "image": "Cabinat/1)Sliding Barn Door Accent Cabinet, Buffet Cabinet Storage Table for Bathroom and home kitchen.webp",
+        "image": "1)Sliding Barn Door Accent Cabinet, Buffet Cabinet Storage Table for Bathroom and home kitchen.webp",
         "price": 499
     },
     {
         "id": 8,
         "name": "TV Cabinet",
-        "image": "Cabinat/1)TV Cabinet.webp",
+        "image": "1)TV Cabinet.webp",
         "price": 359
     },
     {
         "id": 9,
         "name": "Wall - mounted cabinet",
-        "image": "Cabinat/1)Wall - mounted cabinet.webp",
+        "image": "1)Wall - mounted cabinet.webp",
         "price": 700
     },
     {
         "id": 10,
         "name": "Animal Sheep Chair",
-        "image": "Chair/2)Animal Sheep Chair.webp",
+        "image": "2)Animal Sheep Chair.webp",
         "price": 180
     },
     {
         "id": 11,
         "name": "Desk Chair",
-        "image": "Chair/2)Desk Chair.webp",
+        "image": "2)Desk Chair.webp",
         "price": 899
     },
     {
         "id": 12,
         "name": "Gaming Chair",
-        "image": "Chair/2)Gamimg Chair.webp",
+        "image": "2)Gamimg Chair.webp",
         "price": 1000
     },
     {
         "id": 13,
         "name": "Ghost Chair",
-        "image": "Chair/2)Ghost Chair.jpg",
+        "image": "2)Ghost Chair.jpg",
         "price": 120
     },
     {
         "id": 14,
         "name": "Lounge Chair",
-        "image": "Chair/2)Lounge Chair.webp",
+        "image": "2)Lounge Chair.webp",
         "price": 900
     },
     {
         "id": 15,
         "name": "Match Storage Bench Chair",
-        "image": "Chair/2)Match Storage Bench Chair.jpeg",
+        "image": "2)Match Storage Bench Chair.jpeg",
         "price": 450
     },
     {
         "id": 16,
         "name": "Side chair",
-        "image": "Chair/2)Side chair.png",
+        "image": "2)Side chair.png",
         "price": 150
     },
     {
         "id": 17,
         "name": "Slipper Chair",
-        "image": "Chair/2)Slipper Chair1.jpg",
+        "image": "2)Slipper Chair1.jpg",
         "price": 600
     },
     {
         "id": 18,
         "name": "2)wishbone chair.webp",
-        "image": "Chair/2)wishbone chair.webp",
+        "image": "2)wishbone chair.webp",
         "price": 200
     },
     {
