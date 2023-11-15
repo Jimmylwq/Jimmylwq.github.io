@@ -1,0 +1,346 @@
+.background {
+    background-image: url(gray-sofa-brown-living-room-with-copy-space.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:cover;
+    /*background-attachment: fixed;*/
+    height: 920px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: right; /* 垂直居中 */
+    align-items: center;
+    color: white;
+    
+}
+
+.background h1 {
+    font-size: 70px;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.background p {
+    font-size: auto;
+}
+
+.background span {
+    font-size: auto;
+}
+
+/* WhatsApp and sign in Button */
+.button {
+    background-color: transparent; /* Backround be transparent */
+    border: 1px solid white; 
+    text-decoration: none; /* remove underline link*/
+    color: white; /* text color */
+    cursor: pointer; /* change the mouse when over button */
+    font-size: 15px; 
+    padding: 10px 40px; 
+    display: inline-block; /* 使按钮以行内块元素显示，以使字体大小生效 */
+    border-radius: 10px;
+  }
+
+.button:hover {
+    text-decoration: none;
+}
+
+
+
+  
+/*Header*/
+
+/* Reset some default styles to remove margin and padding */
+body, h1, h2, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the header */
+header {
+    background: rgb(239, 188, 133); /* Transparent black background */
+    color: #000000; /* Text color */
+
+}
+
+.header-container {
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    font-size: 20px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.logo img {
+    max-width: 100px; /* Adjust the logo size as needed */
+    width:100%;
+}
+
+.w3-container{
+    background-color: #e8c58500;
+    max-width: 700px;
+}
+
+.w3-dropdown-click{
+    background-color: #ffffff00;
+    border:none;
+    outline:none; 
+    font-size: 90%;
+}
+
+.w3-dropdown-click:hover {
+  background-color: #ffffff00;
+
+
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav li {
+    margin: 0 20px;
+    font-size: 50px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #000000;
+}
+
+
+nav a button{
+    background-color: #00000000;
+    border:none;
+    transition: transform 0.1s;
+}
+
+nav a button:hover {
+  transform: scale(1.1);
+}
+
+
+
+  
+
+
+
+/*Box x3 About us*/
+.container {
+    display: flex;
+    width: auto;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.box {
+    flex:1;
+    width: 100%;
+    height: 200px;
+    background-color: #d48f4f;
+    color: #000000;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    transition: transform 0.2s;
+    margin-left: 30px;
+    margin-right: 30px;
+    border-radius: 30px;
+}
+
+.box i {
+    font-size: 500%;
+    padding: 10px;
+}
+
+.box span {
+    font-size: 500%;
+    padding: 10px;
+}
+.box p {
+    font-family:'Times New Roman', Times, serif;
+    font-size: 100%;
+    padding: 10px;
+    text-align: center;
+}
+
+
+.box:hover {
+    transform: scale(1.1);
+}
+
+
+
+/*Product box x5*/
+.Product {
+
+    display: flex;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-color: #f3de99c9;
+    margin-top: 50px;
+    margin-bottom: 150px;
+    width: auto;
+}
+
+.pro  {
+    flex: 1; 
+    background-color: #f1c42dc9;
+    color: #000000;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    transition: transform 0.8s;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 9px;  
+}
+
+.pro img {
+    width: 100%; /* 设置图片宽度为固定值 */
+    height: 100%; /* 设置图片高度为固定值 */
+    text-align: start;
+}
+
+.pro p {
+    font-family:'Times New Roman', Times, serif;
+    font-size: 15px;
+}
+
+.pro:hover {
+    transform: scale(1.1);
+}
+
+
+
+
+
+
+/*SlideShow*/
+.slideshow-container {
+    position: relative;
+    max-width:100%;
+    margin-top: 150px;
+}
+.slideshow-container h2{
+    margin-top: 10px;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    
+}
+.slide {
+    display: none;
+}
+
+.slide img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+}
+
+.prev, .next {
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+/*Button for top*/
+#fixed-button {
+    background-color: #00000000;
+    border: 2;
+    position: fixed;
+    bottom: 100px;
+    right: 15px;
+}
+
+
+
+/* Style the footer */
+footer {
+    background-color: #e8c585;
+    color: #ffffff;
+    width:100%;
+    height:auto;
+  }
+  
+  
+  .special table td h3{
+    font-size: 130%;
+    color: #ffffff;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+  }
+  
+  .special table td h3.footeeeer {
+    font-size: 90%;
+    text-align: center;
+  }
+  
+  .special table td p{
+    font-size: 70%;
+    color: #ffffff;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+  }
+  
+  .special table{
+    width:100%;
+    text-align: center;
+  }
+  .special table th, td {
+    width: 25%;
+  }
+  
+
+
+
+
+/*About us webpage*/
+.about{
+    background-image: url(About.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 930px;
+}
+.about p{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 100%;
+}
+.about table{
+    height: auto;
+    width:80%;
+    text-align: center;
+    justify-content: center;
+    background-color: #ffffffb7;
+    border-radius: 40px;
+    border-style: solid 5px;
+}
+
+.about table td{
+    height: auto;
+    width:50%;
+    text-align: center;
+    justify-content: center;
+    background-color: #ffffff59;
+    padding:2%;
+    line-height: 1.5;
+}

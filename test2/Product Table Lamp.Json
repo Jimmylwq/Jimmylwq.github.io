@@ -1,0 +1,56 @@
+[
+    {
+        "id":37,
+        "name": "Table Lamp",
+        "image": "5)Table lamp.webp",
+        "price": 500
+    },
+    {
+        "id":38,
+        "name": "Table Lamp Living Modern",
+        "image": "5)Table lamp living modern.webp",
+        "price": 450
+    },
+    {
+        "id":39,
+        "name": "Lamp Living Floor",
+        "image": "5)Lamp Living floor.jpg",
+        "price": 499
+    },
+    {
+        "id":40,
+        "name": "Modern Tall Living Lamp",
+        "image": "5)Modern Tall standing Living lamp.jpg",
+        "price": 699
+    },
+    {
+        "id":41,
+        "name": "Big Round Mirror",
+        "image": "5)Big round mirror.jpeg",
+        "price": 200
+    },
+    {
+        "id":42,
+        "name": "Full Lenght Mirror",
+        "image": "5)Full Lenght Mirror Bedroom.jpg",
+        "price": 360
+    },
+    {
+        "id":43,
+        "name": "Round Mirror LED",
+        "image": "5)round mirror LED.webp",
+        "price": 399
+    },
+    {
+        "id":44,
+        "name": "Tall Tree Indoor",
+        "image": "5)Tall Tree indoor living room.jpg",
+        "price": 299
+    },
+    {
+        "id":45,
+        "name": "Small Tree Indooe",
+        "image": "5)Small tree indoor.png",
+        "price": 100
+    }
+]

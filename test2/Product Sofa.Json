@@ -1,0 +1,56 @@
+[
+    {
+        "id":19,
+        "name": "4 Seader Sofa bed",
+        "image": "3)4 Seader Sofa bed.webp",
+        "price": 1300
+    },
+    {
+        "id":20,
+        "name": "Bean bag Sofa",
+        "image": "3)Bean bag sofa.jpg",
+        "price": 399
+    },
+    {
+        "id":21,
+        "name": "Curved Sofa",
+        "image": "3)Curved Sofa.jpg",
+        "price": 7000
+    },
+    {
+        "id":22,
+        "name": "Designer Living Sofa",
+        "image": "3)Designer Living Sofa.webp",
+        "price": 5999
+    },
+    {
+        "id":23,
+        "name": "Kids Sofa",
+        "image": "3)Kids Sofa.webp",
+        "price": 899
+    },
+    {
+        "id":24,
+        "name": "Modern Classic Sofa",
+        "image": "3)Modern Classic Sofa.jpg",
+        "price": 1999
+    },
+    {
+        "id":25,
+        "name": "Multi-function Sofa Bed",
+        "image": "3)Multi - function sofa bed.webp",
+        "price": 2300
+    },
+    {
+        "id":26,
+        "name": "Sofa Living Room",
+        "image": "3)Sofa Living room.webp",
+        "price": 3000
+    },
+    {
+        "id":27,
+        "name": "Sofa Stool",
+        "image": "3)Sofa Stool.jpg",
+        "price": 400
+    }
+]
