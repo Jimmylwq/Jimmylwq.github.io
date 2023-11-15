@@ -2,55 +2,55 @@
     {
         "id":1,
         "name": "2 Door Sliding Wadrode",
-        "image": "Cabinat/1)2 Door Sliding Wadrode.webp",
+        "image": "1)2 Door Sliding Wadrode.webp",
         "price": 600
     },
     {
         "id":2,
         "name": "2 Door Wadrode",
-        "image": "Cabinat/1)2 Door Wadrode.jpg",
+        "image": "1)2 Door Wadrode.jpg",
         "price": 699
     },
     {
         "id":3,
         "name": "Display  cabinet",
-        "image": "Cabinat/1)Display  cabinet.jpeg",
+        "image": "1)Display  cabinet.jpeg",
         "price": 899
     },
     {
         "id":4,
         "name": "Display wall - mounted cabinet",
-        "image": "Cabinat/1)Display wall - mounted cabinet.jpeg",
+        "image": "1)Display wall - mounted cabinet.jpeg",
         "price": 1050
     },
     {
         "id":5,
         "name": "Multi Cabinat",
-        "image": "Cabinat/1)Multi Cabinat.webp",
+        "image": "1)Multi Cabinat.webp",
         "price": 500
     },
     {
         "id":6,
         "name": "Shoe cabinet with drawer",
-        "image": "Cabinat/1)Shoe cabinet with drawer.webp",
+        "image": "1)Shoe cabinet with drawer.webp",
         "price": 399
     },
     {
         "id":7,
         "name": "Sliding Barn Door Accent Cabinet",
-        "image": "Cabinat/1)Sliding Barn Door Accent Cabinet, Buffet Cabinet Storage Table for Bathroom and home kitchen.webp",
+        "image": "1)Sliding Barn Door Accent Cabinet, Buffet Cabinet Storage Table for Bathroom and home kitchen.webp",
         "price": 499
     },
     {
         "id":8,
         "name": "TV Cabinet",
-        "image": "Cabinat/1)TV Cabinet.webp",
+        "image": "1)TV Cabinet.webp",
         "price": 359
     },
     {
         "id":9,
         "name": "Wall - mounted cabinet",
-        "image": "Cabinat/1)Wall - mounted cabinet.webp",
+        "image": "1)Wall - mounted cabinet.webp",
         "price": 700
     }
    
