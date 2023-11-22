@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 3</title>
+    <style>
+        .p1{
+            color: white;
+        }
+
+        table {
+            border-style: solid;
+            border-collapse: collapse;
+        }
+        .p3{
+            display: block;
+            align-items: baseline;
+        }
+    </style>
+        <script>
+            function MYFORM(){
+                //to validate text - do not allow empty
+                let x = document.MyFirstForm.studentID.value;
+                if(x == ""){
+                    alert("Please Provide your Frist Name!");
+                    return false;
+                }
+
+
+                //to validate text - only allow alphabet charexters
+                let y = document.MyFirstForm.studentName.value;
+                var letters = /^[A-Za-z]/;
+                if(!y.match(letters))
+                {
+                    alert("Please input the alphabet");
+                    return false;
+                }
+
+
+                //Yes Or  No
+                if ((MyFirstForm.question1[0].checked == false)&&(MyFirstForm.question1[1].checked == false))
+                {
+                    alert("Please choose YES or NO");
+                    return false;
+                }
+
+
+                //Gamil format test
+                let Email = document.MyFirstForm.EMAIL123.value;
+                let EmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (Email == "") {
+                    alert("Please enter your email");
+                    return false;
+                }
+
+                if (!EmailRegex.test(Email)) {
+                    alert("Please Check Your Email Format");
+                    return false;
+                }
+
+
+                //to validate checkbox - must tick
+                var group = document.MyFirstForm.question3;
+                for (var i=0; i<group.length; i++) 
+                {
+                    if (group[i].checked){
+                
+                        return false;
+                    }
+                }
+                {
+                    if (i==group.length){    
+                
+                        alert("No Checkbox is checked");
+                        return false;
+                    }
+                }
+
+
+                //to validate checkbox - must tick
+                var group = document.MyFirstForm.question2;
+                for (var i=0; i<group.length; i++) 
+                {
+                    if (group[i].checked){
+                
+                        return false;
+                    }
+                }
+                {
+                    if (i==group.length){    
+                
+                        alert("No Checkbox is checked");
+                        return false;
+                    }
+                }
+
+
+
+                //Age
+                let dobInput = document.getElementById("DOB");
+                let dobValue = dobInput.value;
+
+                if (!dobValue) {
+                    alert("Please enter your date of birth");
+                    return false;
+                }
+                    // Parse the date string to a Date object
+                let dobDate = new Date(dobValue);
+
+                // Get the current date
+                let currentDate = new Date();
+
+                // Calculate the age
+                let age = currentDate.getFullYear() - dobDate.getFullYear();
+                alert("You Ages is:" + age);
+            }
+
+
+            //onchange
+            function myFunction() {
+            var x = document.getElementById("mySelect").value;
+            document.getElementById("demo").innerHTML = "You selected: " + x;
+            }
+        </script>
+</head>
+<body><center>
+    <table border="3" width="50%" cellpadding="">
+    <td><table border="0" cellspacing="0" cellpadding="30" align="center" width="90%" >
+        <tr><td align="center"  class="p1">
+        <font size="4" color="black"><b>DCS3003 Website Design lause Survey</b></font>
+        </td></tr>
+        <td align="center">
+            <table border="3" width="100%">
+            <td><table border="0" cellpadding="5" width="100%">
+                <tr><td colspan="4"><font color="blue"><u>Personal Details</u></font></td></tr>
+                <form name="MyFirstForm" onsubmit="return MYFORM()">
+                <tr align="left">
+                    <th>Student ID</th>
+                    <td>:&nbsp;<input name="studentID" type="text"></td> &nbsp;
+                    <th>Student Name</th>
+                    <td>:&nbsp;<input name="studentName" type="text" ></td> 
+                </tr>
+
+                <tr align="left">
+                    <th>Email addrews</th>
+                    <td>:&nbsp;<input name="EMAIL123" type="email" ></td>&nbsp;
+                    <th>IC NO</th>
+                    <td>:&nbsp;<input name="IC" type="password" minlength="12"></td>
+                </tr>
+
+                <tr align="left">
+                    <th>Course</th>
+                    <td>:&nbsp;<select>
+                        <option value="0" align="center">- List of Courses -</option>
+                        
+                        <optgroup label="Diploma In Computer Science">
+
+                        <option value="DCS_S1">Semester 1</option>
+                        <option value="DCS_S2">Semester 2</option>
+                        <option value="DCS_S3">Semester 3</option>
+                        <option value="DCS_S4">Semester 4</option>
+                        <option value="DCS_S5">Semester 5</option>
+                        <option value="DCS_S6">Semester 6</option>
+                        </optgroup>
+                        
+                        <optgroup label="Diploma In Bussiness">
+                            
+                            <option value="DCS_S1">Semester 1</option>
+                            <option value="DCS_S2">Semester 2</option>
+                            <option value="DCS_S3">Semester 3</option>
+                            <option value="DCS_S4">Semester 4</option>
+                            <option value="DCS_S5">Semester 5</option>
+                            <option value="DCS_S6">Semester 6</option>
+                        </optgroup>
+                        <option value="DAS">Diploma In Airline Services</option>
+                        </select></td>&nbsp;
+
+                    <th>D.O.B</th>
+                    <td>:&nbsp;<input name="DOB" type="date" min="2000-01-01" max="2005-12-31"></td>
+                </tr>
+            </table></td></table>
+        </td>
+        <tr><td>
+            <table border="3" align="center" width="100%">
+                <td>
+                <table border="0" cellspacing="4"  align="center" width="100%">
+                    <tr><td colspan="2"><br><font color="blue"><u>Question</u></font></td></tr>
+                    <tr><td colspan="2"><font color="red">Please answer all question</font><br><br></td></tr>
+
+                    <tr>
+                        <td rowspan="2" class="p3">1) Have you grouped the content of the website Design so far? </td>
+                        <td><input name="question1" type="radio" value="Yes1">Yes<br>
+                            <input name="question1" type="radio" value="No1">No<br><br><br><br></td></tr>
+
+                        </td></tr>
+                    <tr>
+                        <td rowspan="2" class="p3">2) Can You now create a simple but interaction?</td>
+                        <td><input name="question2" type="radio" value="Yes1">Yes<br>
+                            <input name="question2" type="radio" value="No1">No<br><br><br><br></td></tr>
+                        </td></tr>
+                    <tr>
+                        <td class="p3">3) What have you learned so far?</td>
+                        <td>
+                        <input name="question3" type="checkbox" value="Knowledge">Knowledge<br>
+                        <input name="question3" type="checkbox" value="Pratical Skills">Pratical Skills<br>
+                        <input name="question3" type="checkbox" value="Problem Solving">Problem Solving<br>
+                        <input name="question3" type="checkbox" value="Self-Expliration Skills">Self-Expliration Skills
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Wish items/ Suggestion<font color="red">*</font><br>
+                            <textarea rows=5 cols=100 name=address></textarea></td>
+                    </tr>    
+                    <tr><td><br><br>
+                        <label for="mySelect">Country</label>
+                        <select id="mySelect" onchange="myFunction()">
+                            <option value="Malaysia">Malaysia</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Thailand">Thailand</option>
+                            <option value="Chine">Chine</option>
+                        </select>
+                    </td></tr>     
+                </table>
+            </td></table>
+        </td></tr>
+       
+
+            <tr align="center">
+                <td>
+                <button type="reset">Reset</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit">Submit</button>
+                </td>
+            </tr>
+            </form>
+        
+    </table></td></table>
+</center>
+                
+                    
+    
+</body>
+</html>
