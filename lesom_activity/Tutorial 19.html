@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table{
+            font-size: 25px;
+            background-color: aqua;
+            border-style: solid 10px;
+            border-radius: 20px;
+        }
+        button{
+            width: 100px;
+            height: 50px;
+        }
+        select{
+            width: 120px;
+            height: 50px;
+        }
+
+    </style>
+    <script>
+        function checkFruit(){
+            var getFruit = document.getElementById("fruitSelect").value;
+            var getprice = document.getElementById("priceSelect");
+            switch (getFruit) {
+            case "Big Apple":
+                alert("Your Fruit is: " + getFruit);
+                getprice.value = "price1";
+                break;
+
+            case "Middle Apple":
+                alert("Your Fruit is: " + getFruit);
+                getprice.value = "price2";
+                break;
+
+            case "Small Apple":
+                alert("Your Fruit is: " + getFruit);
+                getprice.value = "price3";
+                break;
+
+            case "Orange":
+                alert("Your Fruit is: " + getFruit);
+                getprice.value = "price4";
+                break;
+
+            case "Banana":
+                alert("Your Fruit is: " + getFruit);
+                getprice.value = "price5";
+                break;
+
+            default:
+                alert("Your Fruit is: " + getFruit);
+                getprice.value = "price6";
+                break;
+            }
+        }
+
+        function TestForm(){
+                //to validate text - do not allow empty
+                let x = document.FruitForm.Name.value;
+                var letters = /^[A-Za-z]/;
+                if(x == ""){
+                    alert("Please Provide your Name!");
+                    return false;
+                }           
+                if(!x.match(letters))
+                {
+                    alert("Please input the alphabet");
+                    return false;
+                }
+
+                let y = document.FruitForm.NumberPhone.value;
+                var y2 = /^[0-9]/;
+                if(y == ""){
+                    alert("Please Provide your Number Phone!");
+                    return false;
+                }           
+                if(!y.match(y2))
+                {
+                    alert("Please input the number");
+                    return false;
+                }
+        }
+    </script>
+</head>
+<body>
+    <table border="0" align="center" cellspacing="50" cellpadding="4"  width="50%"> 
+    <form name="FruitForm"  onsubmit="TestForm()">
+        <tr width="50%" align="center"><td colspan="2"><h1>Fruit List</h1></td></tr>
+        <tr><td align="right">Name: </td>
+        <td><input type=text name="Name" id=fname size="100" maxlenght="100"></td></tr>
+        <!--Onchange-->
+        <tr><td align="right">Number phone: </td>
+        <td><input type="text" name="NumberPhone" id=lname min="10" max="11" size="100" maxlenght="100"></td></tr>
+
+        <tr align="center"><td></td><td align="left"><select id="fruitSelect" onchange="checkFruit()" >
+            <option value="0" align="center">--Furit--</option>
+            <optgroup label="Apple">
+            <option value="Big Apple">Big Apple</option>
+            <option value="Middle Apple">Middle Apple</option>
+            <option value="Small Apple">Small Apple</option>
+            </optgroup>
+            <option value="Orange">Orange</option>
+            <option value="Banana">Banana</option>
+            <option value="Mango">Mango</option>
+        </select>
+        <select id="priceSelect" onchange="checkFruit()" >
+            <option value="0" align="center">--Price--</option>
+            <option value="price1" >RM20</option>
+            <option value="price2" >RM15</option>
+            <option value="price3" >RM10</option>
+            <option value="price4" >RM9</option>
+            <option value="price5" >Rm8</option>
+            <option value="price6" >Rm7</option>
+        </select></td></tr>
+        <tr><td align="center" colspan="2"><button type="submit" name="submit" width="20">Submit</button>
+        <button type="reset" name="reset">Reset</button></td></tr>
+    </form>
+    </table>
+</body>
+</html>
+
+
+
