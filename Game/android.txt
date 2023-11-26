@@ -1,0 +1,3 @@
+title=Football Game
+author=JIMMY2
+orientation=portrait
