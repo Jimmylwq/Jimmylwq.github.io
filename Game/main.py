@@ -10,17 +10,17 @@ import Paused
  
 pygame.init()
 clock = pygame.time.Clock()
-sound = pygame.mixer.Sound("sound/sound.wav")
-pygame.mixer.music.load('sound/music.mp3')
+sound = pygame.mixer.Sound("sound.wav")
+pygame.mixer.music.load('music.mp3')
 pygame.mixer.music.play(-1)
-backImg = pygame.image.load('images/background.png')
-ballImg = pygame.image.load('images/football.png')
-goalLeftImg = pygame.image.load('images/goalLeft.png')
-goalRightImg = pygame.image.load('images/goalRight.png')
-boyFirstLeftNormalImg = pygame.image.load('images/boyFirstNormalLeft.png')
-boyFirstRightNormalImg = pygame.image.load('images/boyFirstNormalRight.png')
-boyFirstLeftKickImg = pygame.image.load('images/boyFirstKickLeft.png')
-boyFirstRightKickImg = pygame.image.load('images/boyFirstKickRight.png')
+backImg = pygame.image.load('background.png')
+ballImg = pygame.image.load('football.png')
+goalLeftImg = pygame.image.load('goalLeft.png')
+goalRightImg = pygame.image.load('goalRight.png')
+boyFirstLeftNormalImg = pygame.image.load('boyFirstNormalLeft.png')
+boyFirstRightNormalImg = pygame.image.load('boyFirstNormalRight.png')
+boyFirstLeftKickImg = pygame.image.load('boyFirstKickLeft.png')
+boyFirstRightKickImg = pygame.image.load('boyFirstKickRight.png')
 display_width = 1200
 display_height = 600
 gameDisplay = pygame.display.set_mode((display_width, display_height))
@@ -61,10 +61,10 @@ boy_x_change = 0
 boy_y_change = 0
 
 # Load second player images base setting
-girlFirstLeftNormalImg = pygame.image.load('images/Football Girl (left).png')
-girlFirstRightNormalImg = pygame.image.load('images/Football Girl (Right).png')
-girlFirstLeftKickImg = pygame.image.load('images/Football Girl (left).png')
-girlFirstRightKickImg = pygame.image.load('images/Football Girl (Right).png')
+girlFirstLeftNormalImg = pygame.image.load('Football Girl (left).png')
+girlFirstRightNormalImg = pygame.image.load('Football Girl (Right).png')
+girlFirstLeftKickImg = pygame.image.load('Football Girl (left).png')
+girlFirstRightKickImg = pygame.image.load('Football Girl (Right).png')
 # Second player variables base setting
 girlGravityAcceleration = 0.5
 girlVerticalSpeed = [0, 0]
