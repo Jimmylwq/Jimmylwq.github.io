@@ -24,7 +24,7 @@ let showGif = false;
 
 function preload() {
     landscape = loadImage('https://i.gifer.com/76YS.gif');
-    font = loadFont('norwester/norwester.otf');
+    font = loadFont('norwester.otf');
     backgroundMuzic = createAudio('sound-k-117217.mp3');
     WinningMuzic = createAudio('tadaa-47995.mp3');
 }
