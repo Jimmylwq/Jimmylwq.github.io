@@ -95,7 +95,7 @@ class Animation {
 
     this.sca1 = 1;
 
-    this.movelogo = -30;
+    this.movelogo = -35;
   }
 
   drawCircle() {
@@ -241,8 +241,8 @@ class Animation {
       this.move = true;
       if (this.move) {
         this.x += 7;
-        this.bezierCoords.triangle3[0].x = 433;
-        this.bezierCoords.triangle3[0].y = 340;
+        this.bezierCoords.triangle3[0].x = 430;
+        this.bezierCoords.triangle3[0].y = 335;
         this.bezierCoords.triangle3[1].x = 380;
         this.bezierCoords.triangle3[1].y = 240;
         this.bezierCoords.triangle3[2].x = 365;
@@ -265,27 +265,35 @@ class Animation {
     if (this.moveLeft) {
       
       for(let i = 0; i<4;i++){
-        this.bezierCoords.triangle1[i].x -= 7;
+        this.bezierCoords.triangle1[i].x -= 13;
       }
       for(let i = 0; i<4;i++){
-        this.bezierCoords.triangle2[i].x -= 7;
+        this.bezierCoords.triangle2[i].x -= 13;
       }
       for(let i = 0; i<4;i++){
-        this.bezierCoords.triangle3[i].x -= 7;
+        this.bezierCoords.triangle3[i].x -= 13;
       }
 
   
-      if (this.bezierCoords.triangle2[3].x < -5) {
+      if (this.bezierCoords.triangle2[3].x < -10) {
         this.moveLeft = false;
         this.lineMove = true;
       }
     }
   
     if (this.lineMove) {
-      this.bezierCoords.shadow[0].x  -= 7;
+      // this.bezierCoords.triangle3[0].x +=2.7;
+      // this.bezierCoords.triangle3[0].y -=2;
+      // this.bezierCoords.triangle3[1].x +=1.2;
+      // this.bezierCoords.triangle3[1].y -=0.7;
+      // this.bezierCoords.triangle3[2].x +=0.6;
+      // this.bezierCoords.triangle3[2].y -=0.7;
+
+      this.bezierCoords.shadow[0].x  -= 13;
+      //this.bezierCoords.shadow[0].y  -= 2.7;
       this.bezierCoords.shadow[1].y  = 440;
       this.bezierCoords.shadow[2].y  = 640;
-      this.bezierCoords.shadow[3].x  -= 8;
+      this.bezierCoords.shadow[3].x  -= 14;
       //move2 = true;
       if (this.move2) {
         this.x -= 5;
@@ -313,18 +321,27 @@ class Animation {
     if (this.move3) {
       //move4 = true;
       if (this.move4) {
-        this.bezierCoords.shadow[0].x += 7;
-        this.bezierCoords.shadow[1].y += 1.29;
-        this.bezierCoords.shadow[3].x += 8;
+
+        // this.bezierCoords.triangle3[0].x -=2.5;
+        // this.bezierCoords.triangle3[0].y +=1.8;
+        // this.bezierCoords.triangle3[1].x -=0.8;
+        // this.bezierCoords.triangle3[1].y +=0.5;
+        // this.bezierCoords.triangle3[2].x -=0.8;
+        // this.bezierCoords.triangle3[2].y +=0.5;
+
+        this.bezierCoords.shadow[0].x += 13;
+        //this.bezierCoords.shadow[0].y  += 2.7;
+        this.bezierCoords.shadow[1].y += 1.9;
+        this.bezierCoords.shadow[3].x += 14;
         
         for(let i = 0; i<4;i++){
-          this.bezierCoords.triangle1[i].x += 7;
+          this.bezierCoords.triangle1[i].x += 13;
         }
         for(let i = 0; i<4;i++){
-          this.bezierCoords.triangle2[i].x += 7;
+          this.bezierCoords.triangle2[i].x += 13;
         }
         for(let i = 0; i<4;i++){
-          this.bezierCoords.triangle3[i].x += 7;
+          this.bezierCoords.triangle3[i].x += 13;
         }
 
         this.x-=0.5;
@@ -382,7 +399,7 @@ class Animation {
       if (this.move8) {
         // Increase the rotation angle and update position in the reverse direction
         if (this.rotationAngle4 < 0) {
-          this.y+= 3;
+          this.y+= 2.6;
           this.rotationAngle4 += 0.3;
           this.rotationAngle5 += 0.3;
         } else {
@@ -397,246 +414,237 @@ class Animation {
   }
 
   // the ball become large, let the triangle change the size 
-  runPart5() {
-    console.log("Part5")
+runPart5() {
+    console.log("Part5");
     push();
     if (this.move9) {
-      this.q += 2;
-      this.r += 2;
-      this.y -= 1;
-      if (this.q > 120) {
-        this.move9 = false; 
-        this.move10 = true;
-      }
+        this.q += 2;
+        this.r += 2;
+        this.y -= 1;
+        if (this.q > 120) {
+            this.move9 = false; 
+            this.move10 = true;
+        }
     }
     if (this.move10) {
-      this.q -= 2.2;
-      this.r -= 2.2;
-      this.y += 1;
-      if (this.q <= 50) {
-        this.move10 = false; // Stop the incrementing when q exceeds 10
-        this.move11 = true;
-      }
+        this.q -= 2.2;
+        this.r -= 2.2;
+        this.y += 1;
+        if (this.q <= 50) {
+            this.move10 = false; 
+            this.move11 = true;
+        }
     }
     if (this.move11) {
-      this.bezierCoords.shadow[0].x = 260; 
-      this.bezierCoords.shadow[0].y = 680;
-      this.bezierCoords.shadow[1].x = 330;
-      this.bezierCoords.shadow[1].y = 680;
-      this.bezierCoords.shadow[2].x = 350; 
-      this.bezierCoords.shadow[2].y = 680;
-      this.bezierCoords.shadow[3].x = 450;
-      this.bezierCoords.shadow[3].y = 680;
-  
-      //line triangle1 +40
-      // bez1x1 =350; 
-      this.bezierCoords.triangle1[0].y = 190;
-      this.bezierCoords.triangle1[1].x = 160;
-      this.bezierCoords.triangle1[1].y = 310;
-      this.bezierCoords.triangle1[2].x = 115;  
-      this.bezierCoords.triangle1[2].y = 440;
-      //bez4x1 = 100;
-      this.bezierCoords.triangle1[3].y = 640;
-  
-      //line triangle12
-      //bez1x2 =100; 
-      this.bezierCoords.triangle2[0].y = 640;
-      this.bezierCoords.triangle2[1].x = 250;
-      this.bezierCoords.triangle2[1].y = 690;
-      this.bezierCoords.triangle2[2].x = 320; 
-      this.bezierCoords.triangle2[2].y = 740;
-      //bez4x2 = 600;
-      this.bezierCoords.triangle2[3].y = 640;
-  
-      //line triangle3
-       //bez1x3 = 600; 
-      this.bezierCoords.triangle3[0].y = 640;
-      this.bezierCoords.triangle3[1].x = 570;
-      this.bezierCoords.triangle3[1].y = 420;
-      this.bezierCoords.triangle3[2].x = 575; 
-      this.bezierCoords.triangle3[2].y = 370;
-      //bez4x3 = 350;
-      this.bezierCoords.triangle3[3].y = 190;
-  
-  
-      // bigger circle
-      this.x+=3.5;//3.5
-      this.y-=7;//7
-      this.q+=20;
-      this.r+=20;  
-  
-      this.rotationAngle3 -=0.1;
-      this.rotationAngle -=0.1;
-      this.rotationAngle4 -=0.09;
-      if(this.q > 390){
-        this.move11 = false;
-        this.move12 = true;
-      }
+        this.bezierCoords.shadow[0].x = 260; 
+        this.bezierCoords.shadow[0].y = 652;
+        this.bezierCoords.shadow[1].x = 330;
+        this.bezierCoords.shadow[1].y = 652;
+        this.bezierCoords.shadow[2].x = 350; 
+        this.bezierCoords.shadow[2].y = 652;
+        this.bezierCoords.shadow[3].x = 450;
+        this.bezierCoords.shadow[3].y = 652;
+    
+        //line triangle1 +40
+        // bez1x1 =350; 
+        this.bezierCoords.triangle1[0].y = 190;
+        this.bezierCoords.triangle1[1].x = 160;
+        this.bezierCoords.triangle1[1].y = 310;
+        this.bezierCoords.triangle1[2].x = 115;  
+        this.bezierCoords.triangle1[2].y = 440;
+        //bez4x1 = 100;
+        this.bezierCoords.triangle1[3].y = 640;
+    
+        //line triangle12
+        //bez1x2 =100; 
+        this.bezierCoords.triangle2[0].y = 640;
+        this.bezierCoords.triangle2[1].x = 250;
+        this.bezierCoords.triangle2[1].y = 690;
+        this.bezierCoords.triangle2[2].x = 320; 
+        this.bezierCoords.triangle2[2].y = 740;
+        //bez4x2 = 600;
+        this.bezierCoords.triangle2[3].y = 640;
+    
+        //line triangle3
+         //bez1x3 = 600; 
+        this.bezierCoords.triangle3[0].y = 640;
+        this.bezierCoords.triangle3[1].x = 570;
+        this.bezierCoords.triangle3[1].y = 420;
+        this.bezierCoords.triangle3[2].x = 575; 
+        this.bezierCoords.triangle3[2].y = 370;
+        //bez4x3 = 350;
+        this.bezierCoords.triangle3[3].y = 190;
+    
+        // bigger circle
+        this.x += 3.5;
+        this.y -= 7;
+        this.q += 20;
+        this.r += 20;  
+    
+        this.rotationAngle3 -= 0.2; 
+        this.rotationAngle -= 0.2; 
+        this.rotationAngle4 -= 0.18; 
+        if (this.q > 390) {
+            this.move11 = false;
+            this.move12 = true;
+        }
     }
     // fly up
     if (this.move12) {
-      if(this.rotationAngle >= -31){
+        if (this.rotationAngle >= -31) {
 
-        this.rotationAngle3 -=0.1;
-        this.rotationAngle -=0.1;
-        this.rotationAngle4 -=0.09;
-        
-        this.movelogo -= 1.2;
+            this.rotationAngle3 -= 0.2; 
+            this.rotationAngle -= 0.2; 
+            this.rotationAngle4 -= 0.18; 
+            
+            this.movelogo -= 2.5;
 
-        this.bezierCoords.shadow[0].x += 1.2; 
-        this.bezierCoords.shadow[3].x +=0.85;
-        console.log("x"+ this.x)
-        console.log("y"+ this.y)
-        image(img, 347.86 - (this.movelogo*0.47), 486.29999999999814 + this.movelogo, 150, 150); 
-  
-      }else{
-        this.move12= false;
-        this.move13= true;
-      }
+            this.bezierCoords.shadow[0].x += 1.2; 
+            this.bezierCoords.shadow[3].x += 0.85;
+            console.log("x" + this.x);
+            console.log("y" + this.y);
+            image(img, 347.86 - (this.movelogo * 0.47), 486.29999999999814 + this.movelogo, 150, 150); 
+
+        } else {
+            this.move12 = false;
+            this.move13 = true;
+        }
     }
-  
-    if(this.move13){
-      this.q=30;
-      //console.log(rotationAngle); //-45
-      
-      this.drawShortLine();
-  
-      //rotationAngle = 0;
-  
-      //line triangle1 +40
-      this.bezierCoords.triangle1[0].x = 350; 
-      this.bezierCoords.triangle1[0].y = 190;
-      this.bezierCoords.triangle1[1].x = 340;
-      this.bezierCoords.triangle1[1].y = 210;
-      this.bezierCoords.triangle1[2].x = 210;  
-      this.bezierCoords.triangle1[2].y = 440;
-      this.bezierCoords.triangle1[3].x = 100;
-      this.bezierCoords.triangle1[3].y = 640;
-  
-      //line triangle12
-      this.bezierCoords.triangle2[0].x = 100; 
-      this.bezierCoords.triangle2[0].y = 640;
-      this.bezierCoords.triangle2[1].x = 150;
-      this.bezierCoords.triangle2[1].y = 640;
-      this.bezierCoords.triangle2[2].x = 300; 
-      this.bezierCoords.triangle2[2].y = 640;
-      this.bezierCoords.triangle2[3].x = 600;
-      this.bezierCoords.triangle2[3].y = 640;
-  
-      //line triangle3
-      this.bezierCoords.triangle3[0].x = 600; 
-      this.bezierCoords.triangle3[0].y = 640;
-      this.bezierCoords.triangle3[1].x = 550;
-      this.bezierCoords.triangle3[1].y = 540;
-      this.bezierCoords.triangle3[2].x = 440; 
-      this.bezierCoords.triangle3[2].y = 360;
-      this.bezierCoords.triangle3[3].x = 350;
-      this.bezierCoords.triangle3[3].y = 190;
-  
-      // star around the circle
-      this.lineCoords[0].startX += 5;
-      this.lineCoords[0].startY -=0.1;
-      this.lineCoords[0].endX +=0.5;
-  
-      this.lineCoords[1].startX -=4;
-      this.lineCoords[1].startY +=4;
-      this.lineCoords[1].endX +=0.2;
-  
-      this.lineCoords[2].startX -= 5;
-      this.lineCoords[2].startY += 0.1;
-      this.lineCoords[2].endX -= 2;
-  
-      this.rotationAngle += 0.2;
-      this.rotationAngle3 += 0.2;
-      this.rotationAngle4 +=0.1;
-  
-      if(this.rotationAngle3 >= -26){
-        this.move13=false;
-        this.move14 = true;
-      }
+
+    if (this.move13) {
+        this.q = 30;
+        this.drawShortLine();
+
+        //line triangle1 +40
+        this.bezierCoords.triangle1[0].x = 350; 
+        this.bezierCoords.triangle1[0].y = 190;
+        this.bezierCoords.triangle1[1].x = 340;
+        this.bezierCoords.triangle1[1].y = 210;
+        this.bezierCoords.triangle1[2].x = 210;  
+        this.bezierCoords.triangle1[2].y = 440;
+        this.bezierCoords.triangle1[3].x = 100;
+        this.bezierCoords.triangle1[3].y = 640;
+
+        //line triangle12
+        this.bezierCoords.triangle2[0].x = 100; 
+        this.bezierCoords.triangle2[0].y = 640;
+        this.bezierCoords.triangle2[1].x = 150;
+        this.bezierCoords.triangle2[1].y = 640;
+        this.bezierCoords.triangle2[2].x = 300; 
+        this.bezierCoords.triangle2[2].y = 640;
+        this.bezierCoords.triangle2[3].x = 600;
+        this.bezierCoords.triangle2[3].y = 640;
+
+        //line triangle3
+        this.bezierCoords.triangle3[0].x = 600; 
+        this.bezierCoords.triangle3[0].y = 640;
+        this.bezierCoords.triangle3[1].x = 550;
+        this.bezierCoords.triangle3[1].y = 540;
+        this.bezierCoords.triangle3[2].x = 440; 
+        this.bezierCoords.triangle3[2].y = 360;
+        this.bezierCoords.triangle3[3].x = 350;
+        this.bezierCoords.triangle3[3].y = 190;
+
+        // star around the circle
+        this.lineCoords[0].startX += 5;
+        this.lineCoords[0].startY -= 0.1;
+        this.lineCoords[0].endX += 0.5;
+
+        this.lineCoords[1].startX -= 4;
+        this.lineCoords[1].startY += 4;
+        this.lineCoords[1].endX += 0.2;
+
+        this.lineCoords[2].startX -= 5;
+        this.lineCoords[2].startY += 0.1;
+        this.lineCoords[2].endX -= 2;
+
+        this.rotationAngle += 0.4; 
+        this.rotationAngle3 += 0.4; 
+        this.rotationAngle4 += 0.2; 
+
+        if (this.rotationAngle3 >= -26) {
+            this.move13 = false;
+            this.move14 = true;
+        }
     } 
-    if(this.move14){
-      //+20
-      this.drawTriangle();
-      this.triangleCoords[0].x = 350;
-      this.triangleCoords[0].y = 220;
-      this.triangleCoords[1].x = 310;
-      this.triangleCoords[1].y = 290;
-      this.triangleCoords[2].x = 390;
-      this.triangleCoords[2].y = 290;
-  
-      this.rotationAngle3 +=1;
-      this.rotationAngle +=1;
-      this.rotationAngle4 +=0.3;
-  
-      this.bezierCoords.shadow[0].x  -=5; 
-      this.bezierCoords.shadow[3].x  -=5;
-      
-      if(this.rotationAngle3 >= 25){
-        this.move14=false; 
-        this.move15 = true;
-      }
-    } if(this.move15){
-      this.drawTriangle();
-      this.triangleCoords[0].x = 350;
-      this.triangleCoords[0].y = 220;
-      this.triangleCoords[1].x = 310;
-      this.triangleCoords[1].y = 290;
-      this.triangleCoords[2].x = 390;
-      this.triangleCoords[2].y = 290;
-  
-      this.rotationAngle3 -=3.5;
-      this.rotationAngle -=3.5;
-      this.rotationAngle4 -=0.08;
-      this.y +=27;
-      this.x -= 2;
-      //line triangle1
-      this.bezierCoords.triangle1[0].y += 27;
-      this.bezierCoords.triangle1[1].y  += 27.1;
-      this.bezierCoords.triangle1[2].y  += 27.7;
-      this.bezierCoords.triangle1[3].y  += 28.3;
-  
-      //line triangle12
-      this.bezierCoords.triangle2[0].y  += 28.3;
-      this.bezierCoords.triangle2[1].y  += 27.7; 
-      this.bezierCoords.triangle2[2].y  += 27.1;
-      this.bezierCoords.triangle2[3].y  += 27;
-  
-      //line triangle3
-      this.bezierCoords.triangle3[0].y  += 27;
-      this.bezierCoords.triangle3[1].y   += 27;
-      this.bezierCoords.triangle3[2].y  += 27;
-      this.bezierCoords.triangle3[3].y  += 27;
-  
-      this.bezierCoords.shadow[0].x -=5; 
-      this.bezierCoords.shadow[3].x -=5;
-      
-      if(this.rotationAngle4 <= -10){
-        this.move15=false; 
-        this.move16 = true;
-      }
+    if (this.move14) {
+        this.drawTriangle();
+        this.triangleCoords[0].x = 350;
+        this.triangleCoords[0].y = 220;
+        this.triangleCoords[1].x = 310;
+        this.triangleCoords[1].y = 290;
+        this.triangleCoords[2].x = 390;
+        this.triangleCoords[2].y = 290;
+
+        this.rotationAngle3 += 2; 
+        this.rotationAngle += 2; 
+        this.rotationAngle4 += 0.6; 
+
+        this.bezierCoords.shadow[0].x -= 5; 
+        this.bezierCoords.shadow[3].x -= 5;
+        
+        if (this.rotationAngle3 >= 25) {
+            this.move14 = false; 
+            this.move15 = true;
+        }
+    } 
+    if (this.move15) {
+        this.drawTriangle();
+        this.triangleCoords[0].x = 350;
+        this.triangleCoords[0].y = 220;
+        this.triangleCoords[1].x = 310;
+        this.triangleCoords[1].y = 290;
+        this.triangleCoords[2].x = 390;
+        this.triangleCoords[2].y = 290;
+
+        this.rotationAngle3 -= 5; 
+        this.rotationAngle -= 5; 
+        this.rotationAngle4 -= 0.16; 
+        this.y += 27;
+        this.x -= 2;
+        //line triangle1
+        this.bezierCoords.triangle1[0].y += 27;
+        this.bezierCoords.triangle1[1].y  += 27.1;
+        this.bezierCoords.triangle1[2].y  += 27.7;
+        this.bezierCoords.triangle1[3].y  += 28.3;
+
+        //line triangle12
+        this.bezierCoords.triangle2[0].y  += 28.3;
+        this.bezierCoords.triangle2[1].y  += 27.7; 
+        this.bezierCoords.triangle2[2].y  += 27.1;
+        this.bezierCoords.triangle2[3].y  += 27;
+
+        //line triangle3
+        this.bezierCoords.triangle3[0].y  += 27;
+        this.bezierCoords.triangle3[1].y   += 27;
+        this.bezierCoords.triangle3[2].y  += 27;
+        this.bezierCoords.triangle3[3].y  += 27;
+
+        this.bezierCoords.shadow[0].x -= 5; 
+        this.bezierCoords.shadow[3].x -= 5;
+        
+        if (this.rotationAngle4 <= -10) {
+            this.move15 = false; 
+            this.move16 = true;
+        }
     }
     if (this.move16) {
-      //increase y until it reaches or exceeds 850
-      if (this.y < 700) {
-        this.y += 5;
-        
-      } else {
-        //if y is 850 or more, start decreasing x
-        this.x -= 5;
-        this.q +=1.5;
-      }
-  
-      // Stop the movement when x is 250 or less
-      if (this.x <= 250) {
-        this.move16 = false;
-        this.move17 = true;
-        this.part = 6;
-        console.log("part6");
-      }
+        if (this.y < 700) {
+            this.y += 5;
+            
+        } else {
+            this.x -= 5;
+            this.q += 1.5;
+        }
+        if (this.x <= 250) {
+            this.move16 = false;
+            this.move17 = true;
+            this.part = 6;
+            console.log("part6");
+        }
     }
     pop();
-  }
+}
 
   // set the default setting again
   runPart6() {
@@ -708,7 +716,7 @@ class Animation {
     this.centerX = 400;
     this.centerY = 150;
 
-    this.movelogo = -30;
+    this.movelogo = -35;
 
     this.sca1 = 1;
     this.part = 1;
