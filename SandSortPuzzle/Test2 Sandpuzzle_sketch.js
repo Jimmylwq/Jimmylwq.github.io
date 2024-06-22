@@ -43,7 +43,7 @@ function preload() {
     landscape = loadImage('IrM.gif');
     landscape2 = loadImage('Lake-night.png');
     landscape3 = loadImage('falling-stars-g12ux36ccv3n6r8b.gif');
-    font = loadFont('norwester/norwester.otf');
+    font = loadFont('norwester.otf');
     backgroundMuzic = createAudio('sound-k-117217.mp3');
     WinningMuzic = createAudio('tadaa-47995.mp3');
     completeGif = createImg('d87144f81ac17ad2ccb567ccece776f3.gif'); // Load the GIF
