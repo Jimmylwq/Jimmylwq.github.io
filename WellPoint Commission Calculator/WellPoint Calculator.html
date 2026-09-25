@@ -660,6 +660,16 @@ document.getElementById('btnExcel').addEventListener('click', async ()=>{
 renderWorkers();
 renderInvoices();
 renderSummary();
+
+  // —— 离开页面前提醒 ——
+window.addEventListener('beforeunload', function(e){
+  const hasWork = state.invoices.length > 0
+               || state.workers.length > 0;
+  if(!hasWork) return;          // 什么都没做，不拦
+  e.preventDefault();
+  e.returnValue = '';           // 现代浏览器需要这句才会弹
+  return '';                    // 老浏览器兼容
+});
 </script>
 </body>
 </html>
