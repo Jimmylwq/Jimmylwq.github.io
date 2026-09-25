@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AutoCount 员工提成计算系统</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f4f5f7;--panel:#ffffff;--text:#161a20;--muted:#68707d;--border:#e2e5ea;
+  --accent:#1f6feb;--accent-text:#ffffff;--danger:#d9364a;--good:#178a4c;--warn:#b8790a;--chip:#eef2f9;
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0e1013;--panel:#191c22;--text:#e7e9ee;--muted:#9aa1ad;--border:#2c313a;--accent:#4c8dff;--accent-text:#0e1013;--danger:#ff6b7a;--good:#3fd07a;--warn:#ffc451;--chip:#232833;}
+}
+:root[data-theme="dark"]{--bg:#0e1013;--panel:#191c22;--text:#e7e9ee;--muted:#9aa1ad;--border:#2c313a;--accent:#4c8dff;--accent-text:#0e1013;--danger:#ff6b7a;--good:#3fd07a;--warn:#ffc451;--chip:#232833;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100%;}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 60px;}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;}
+.logo{flex-shrink:0;display:flex;align-items:center;}
+.logo img{display:block;height:60px;width:auto;max-width:170px;object-fit:contain;margin-right: 10px;}
+.brand-text{min-width:0;}
+h1{font-size:20px;margin:0;}
+.sub{color:var(--muted);font-size:13px;margin-top:2px;}
+.grid{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;}
+@media (max-width:860px){.grid{grid-template-columns:1fr;}}
+@media (min-width:861px){
+  .sticky-col{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));align-self:start;max-height:calc(100vh - 32px);overflow:auto;}
+}
+@media (max-width:520px){
+  .brand{gap:8px;}
+  .logo img{height:34px;max-width:90px;}
+}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+.card h2{font-size:15px;margin:0 0 10px;}
+.card p.hint{color:var(--muted);font-size:12px;margin:4px 0 10px;}
+input[type=file]{font-size:13px;}
+input[type=text]{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 10px;font-size:14px;}
+button{cursor:pointer;border:none;border-radius:8px;padding:9px 15px;font-size:14px;font-weight:600;}
+.btn-accent{background:var(--accent);color:var(--accent-text);}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--chip);}
+label.btn-ghost{display:inline-flex;align-items:center;}
+.row-inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.chip{background:var(--chip);border:1px solid var(--border);border-radius:999px;padding:6px 11px;font-size:13px;display:flex;align-items:center;gap:6px;}
+.chip button{background:none;border:none;color:var(--danger);font-weight:700;padding:0 2px;font-size:14px;}
+.stats-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.stat{flex:1;min-width:110px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
+.stat-num{font-size:22px;font-weight:800;}
+.stat-label{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.stat.good .stat-num{color:var(--good);}
+.progress-track{height:12px;background:var(--chip);border-radius:6px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--good);transition:width .25s;}
+table{width:100%;border-collapse:collapse;font-size:14.5px;}
+th,td{border-bottom:1px solid var(--border);padding:10px 8px;text-align:left;white-space:nowrap;}
+th{color:var(--muted);font-weight:700;font-size:12px;text-transform:uppercase;background:var(--panel);position:sticky;top:0;z-index:1;}
+.tbl-wrap{overflow:auto;max-height:560px;border:1px solid var(--border);border-radius:10px;}
+tbody tr{cursor:pointer;}
+tbody tr:hover{background:var(--chip);}
+tr.tr-assigned{background:rgba(23,138,76,0.12);}
+.check{color:var(--good);font-weight:800;margin-left:6px;font-size:15px;}
+.mono{font-variant-numeric:tabular-nums;}
+.muted{color:var(--muted);}
+.badge-warn{color:var(--warn);font-size:11px;}
+.summary-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.summary-row:last-child{border-bottom:none;}
+.summary-total{font-weight:700;padding-top:8px;margin-top:4px;border-top:2px solid var(--border);display:flex;justify-content:space-between;}
+.empty{color:var(--muted);font-size:13px;padding:20px 0;text-align:center;}
+footer{color:var(--muted);font-size:11px;text-align:center;margin-top:20px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;}
+.modal-box{background:var(--panel);border-radius:14px;max-width:600px;width:100%;max-height:82vh;overflow:auto;padding:20px;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;}
+.modal-head h3{margin:0;font-size:17px;}
+.line-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13.5px;}
+.line-item.deducted{color:var(--danger);}
+.line-item .tag{font-size:11px;background:var(--danger);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px;}
+.calc-box{margin-top:14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.calc-row{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;}
+.calc-row.final{font-weight:800;border-top:1px solid var(--border);margin-top:4px;padding-top:8px;}
+.assign-btn{background:var(--bg);border:2px solid var(--accent);border-radius:8px;padding:8px 12px;font-size:14px;font-weight:600;color:var(--text);min-width:160px;text-align:left;white-space:normal;}
+tr.tr-assigned .assign-btn{border-color:var(--good);}
+.assign-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:15px;cursor:pointer;}
+.assign-item input{width:20px;height:20px;flex-shrink:0;}
+.assign-item.checked{background:rgba(23,138,76,0.12);border-color:var(--good);}
+#printArea{display:none;}
+#printArea table{width:100%;border-collapse:collapse;font-size:11px;color:#111;}
+#printArea th,#printArea td{border:1px solid #999;padding:5px 6px;text-align:left;}
+#printArea th{background:#eee;}
+#printArea h2{margin:0 0 4px;font-size:16px;color:#111;}
+#printArea .meta{font-size:11px;color:#444;margin-bottom:12px;}
+#printArea .remarks-col{min-width:160px;}
+#printArea .page-break{page-break-before:always;break-before:page;padding-top:6px;}
+@media print{
+  body > *{display:none !important;}
+  #printArea{display:block !important;background:#fff;color:#111;}
+  @page{size:A4 landscape;margin:12mm;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- <header>
+    <div>
+      <h1> WellPoint🔧 Commission Calculator System</h1>
+      <div class="sub">~ 如果刷新页面即清空 ~</div>
+    </div>
+    <button class="btn-ghost" onclick="if(confirm('确定要清空所有数据并重新开始吗？'))location.reload()">重置 / Reset</button>
+  </header> -->
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <!-- 换成你自己的图片路径 / SVG -->
+        <img src="C:\Users\jimmy.ling\Downloads\Gemini_Generated_Image_1k7d091k7d091k7d-removebg-preview.png" alt="WellPoint Logo">
+      </div>
+      <div class="brand-text">
+        <h1>WellPoint ·  Commission Calculator System💰</h1>
+        <div class="sub">~ 如果刷新页面即清空 ~</div>
+      </div>
+    </div>
+    <button class="btn-ghost" onclick="if(confirm('确定要清空所有数据并重新开始吗？'))location.reload()">重置 / Reset</button>
+  </header>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>Step 1 · 上传 AR Invoice Audit Trail Listing</h2>
+        <p class="hint">上传 AutoCount 导出的 Excel 报表（.xlsx）。系统会自动识别表头，只扣除真正的轮胎（如 TYRE215-60-17）和电池（BATTERY...）商品，不会误扣 bearing、fender、valve、labour charge 等相似字眼的项目，并过滤出结算金额 ≥ RM500 的达标发票。</p>
+        <input type="file" id="fileInput" accept=".xlsx,.xls">
+        <div id="fileStatus" class="badge-warn" style="margin-top:8px;"></div>
+        <div id="statsBox"></div>
+      </div>
+
+      <div class="card">
+        <h2>Step 1b · 员工名单 Worker List</h2>
+        <div class="row-inline">
+          <input type="text" id="workerInput" placeholder="输入员工姓名后按 Enter 或点击新增">
+          <button class="btn-accent" id="addWorkerBtn">新增</button>
+        </div>
+        <div class="row-inline" style="margin-top:10px;">
+          <label class="btn-ghost" style="color:#0e1013;background:#fff;font-size: 10px; padding:5px 15px;border-radius:8px;gap:6px;">导入员工 Excel
+            <input type="file" id="workerFile" accept=".xlsx,.xls" style="display:none;">
+          </label>
+          <span class="muted" style="font-size:12px;">可上传保存好的员工名单文件，重复姓名自动去重，之后每次直接用同一个文件即可</span>
+        </div>
+        <div class="chips" id="workerChips"></div>
+      </div>
+
+      <div class="card">
+        <h2>Step 2 · 达标发票列表 & 分配员工</h2>
+        <p class="hint">发票已按发票号顺序排列。点击任意一行可查看该发票完整明细；点击「负责员工」按钮可勾选 1 位或多位员工，多人会自动平分这张发票的提成。已分配的发票会变成绿色并打勾。</p>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="muted" id="progressText" style="font-size:12.5px;margin:6px 0 10px;">已分配 0 / 0 张发票</div>
+        <div class="row-inline" style="margin-bottom:14px;">
+          <button id="btnAutoAssign" style="border:1px dashed var(--warn);color:var(--warn);background:transparent;">🧪 测试用：一键平均分配所有员工</button>
+          <span class="muted" style="font-size:11.5px;">仅供测试导出效果，确认没问题后可移除此按钮</span>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>日期</th><th>发票号</th><th>原始总额</th><th>扣除 Tyre/Batt</th><th>结算金额</th><th>提成 RM</th><th>负责员工</th></tr>
+            </thead>
+            <tbody id="invoiceBody"></tbody>
+          </table>
+        </div>
+        <div id="invoiceEmpty" class="empty">尚未上传发票文件，或没有达标发票。</div>
+      </div>
+    </div>
+
+    <div class="sticky-col">
+      <div class="card">
+        <h2>Step 3 · 实时汇总</h2>
+        <div id="summaryList"></div>
+      </div>
+      <div class="card">
+        <h2>Step 4 · 导出报表</h2>
+        <p class="hint">导出 PDF 会打开浏览器的打印窗口，请在「打印机 / 目的地」选择「另存为 PDF」保存，中文字体会正常显示。PDF 明细表右侧预留空白 “Manual Remarks / 扣款备注” 列，供财务手写核算跨月手尾。</p>
+        <div class="row-inline">
+          <button class="btn-accent" id="btnPDF">导出 PDF</button>
+          <button class="btn-ghost" id="btnExcel">导出 Excel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>提成公式：Commission = floor(结算金额 / 500) × 25，仅计算扣除 Tyre/Battery 后金额 ≥ RM500 的发票。</footer>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" style="display:none;" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="modalTitle"></h3><button class="btn-ghost" onclick="closeModal()">关闭 ✕</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="assignOverlay" style="display:none;" onclick="if(event.target===this)closeAssign()">
+  <div class="modal-box" style="max-width:400px;">
+    <div class="modal-head"><h3>分配负责员工</h3><button class="btn-ghost" onclick="closeAssign()">关闭 ✕</button></div>
+    <p class="hint" style="margin-top:-6px;">可勾选 1 位或多位员工，多人会自动平分这张发票的提成。</p>
+    <div id="assignList" style="display:flex;flex-direction:column;gap:10px;max-height:340px;overflow:auto;"></div>
+    <div class="row-inline" style="margin-top:16px;justify-content:flex-end;">
+      <button class="btn-accent" id="assignConfirmBtn" style="font-size:15px;padding:10px 22px;">确认</button>
+    </div>
+  </div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+const state = { workers: [], invoices: [], stats: null };
+
+function parseNum(v){
+  if(v===undefined||v===null) return 0;
+  const s = v.toString().replace(/[^0-9.\-]/g,'');
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+function fmt(n){ return 'RM ' + (n||0).toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function findAnchor(header, regexes){
+  for(let c=0;c<header.length;c++){
+    const v=(header[c]||'').toString().trim();
+    if(regexes.some(re=>re.test(v))) return c;
+  }
+  return -1;
+}
+function isDateStr(v){ return /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/.test((v||'').toString().trim()); }
+function isNumStr(v){ v=(v===undefined||v===null)?'':v.toString().trim(); return v!=='' && !isNaN(parseFloat(v.replace(/,/g,''))); }
+
+function detectColumns(rows){
+  let headerRowIdx = -1;
+  for(let r=0;r<Math.min(rows.length,60);r++){
+    if((rows[r]||[]).some(c=>/^doc\.?\s*no\.?$/i.test((c||'').toString().trim()))){ headerRowIdx=r; break; }
+  }
+  if(headerRowIdx===-1) return null;
+  const header = rows[headerRowIdx];
+  const docAnchor = findAnchor(header,[/^doc\.?\s*no\.?$/i]);
+  const dateAnchor = findAnchor(header,[/^date$/i]);
+  const debitAnchor = findAnchor(header,[/^debit$/i]);
+  const creditAnchor = findAnchor(header,[/^credit$/i]);
+  const transAnchor = findAnchor(header,[/trans.*desc/i, /^description$/i]);
+  if([docAnchor,dateAnchor,debitAnchor,creditAnchor,transAnchor].some(x=>x===-1)) return null;
+
+  const sampleEnd = Math.min(rows.length, headerRowIdx+500);
+  const sample = [];
+  for(let r=headerRowIdx+1;r<sampleEnd;r++) sample.push(r);
+  const docCol = docAnchor;
+  const isMainRow = r => ((rows[r]||[])[docCol]||'').toString().trim()!=='';
+
+  function bestCol(anchor, test, window){
+    let best=anchor, bestScore=0;
+    for(let c=Math.max(0,anchor-window); c<=anchor+window; c++){
+      let score=0;
+      for(const r of sample){ if(test((rows[r]||[])[c])) score++; }
+      if(score>bestScore){ bestScore=score; best=c; }
+    }
+    return best;
+  }
+  const dateCol = bestCol(dateAnchor, isDateStr, 5);
+  const debitCol = bestCol(debitAnchor, v=>isNumStr(v)&&isMainRow(sample[0]), 4) === undefined ? debitAnchor : bestCol(debitAnchor, isNumStr, 4);
+  const creditCol = bestCol(creditAnchor, isNumStr, 4);
+
+  let transCol = transAnchor, bestScore = -Infinity;
+  for(let c=Math.max(0,transAnchor-4); c<=transAnchor+4; c++){
+    let score=0;
+    for(const r of sample){
+      const v=((rows[r]||[])[c]||'').toString().trim();
+      if(!v) continue;
+      score += isMainRow(r) ? -1 : 1;
+    }
+    if(score>bestScore){ bestScore=score; transCol=c; }
+  }
+  return {headerRow:headerRowIdx, dateCol, docCol, debitCol, creditCol, transCol};
+}
+
+function findPeriod(rows){
+  for(let r=0;r<Math.min(rows.length,25);r++){
+    const row = rows[r]||[];
+    for(let c=0;c<row.length;c++){
+      if(/report\s*from/i.test((row[c]||'').toString())){
+        const rest = row.slice(c+1).map(v=>(v||'').toString().trim()).filter(Boolean);
+        const dates = rest.filter(v=>/\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/.test(v));
+        if(dates.length>=2) return dates[0] + ' 至 ' + dates[1];
+        if(dates.length===1) return dates[0];
+      }
+    }
+  }
+  return '';
+}
+
+function isDeductible(desc){
+  const d = (desc||'').toUpperCase();
+  const isBattery = /BATTERY/.test(d) && !/(COVER|WATER)/.test(d);
+  const isTyre = /TYRE/.test(d) && /\d/.test(d) && !/(BEARING|FENDER|VALVE|NUT|COVER|LINER|LABOUR|LABOR|BALANC|PATCH|CHANG)/.test(d);
+  return isBattery || isTyre;
+}
+function parseInvoices(rows, cols){
+  const all = [];
+  let current = null;
+  for(let r=cols.headerRow+1;r<rows.length;r++){
+    const row = rows[r] || [];
+    if(row.every(c=>(c===''||c===undefined||c===null))) continue;
+    const docNo = (row[cols.docCol]||'').toString().trim();
+    const dateVal = (row[cols.dateCol]||'').toString().trim();
+    const debitVal = parseNum(row[cols.debitCol]);
+    const desc = (row[cols.transCol]||'').toString().trim();
+    const creditVal = parseNum(row[cols.creditCol]);
+    if(docNo){
+      current = { date: dateVal, docNo, debit: debitVal, lines: [], workers: [] };
+      all.push(current);
+    } else if(current && desc){
+      const deducted = isDeductible(desc) && creditVal>0;
+      current.lines.push({desc, amount: creditVal, deducted});
+    }
+  }
+  const withCalc = all.map(inv=>{
+    const deductTotal = inv.lines.filter(l=>l.deducted).reduce((s,l)=>s+l.amount,0);
+    const final = inv.debit - deductTotal;
+    const commission = Math.floor(final/500)*25;
+    return {...inv, deductTotal, final, commission};
+  });
+  withCalc.sort((a,b)=>a.docNo.localeCompare(b.docNo, undefined, {numeric:true}));
+  const total = withCalc.length;
+  const rawQualify = withCalc.filter(i=>i.debit>=500).length;
+  const filtered = withCalc.filter(i=>i.final>=500);
+  return { all: withCalc, filtered, stats: { total, rawQualify, finalQualify: filtered.length } };
+}
+
+document.getElementById('fileInput').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('fileStatus');
+  statusEl.style.color = '';
+  statusEl.textContent = '正在解析...';
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const data = new Uint8Array(evt.target.result);
+      const wb = XLSX.read(data, {type:'array', cellDates:true});
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, defval:''});
+      const cols = detectColumns(rows);
+      if(!cols){
+        statusEl.style.color = 'var(--danger)';
+        statusEl.textContent = '无法识别表头（需包含 Date / Doc No / Debit / Trans. Description / Credit 列），请检查文件格式。';
+        return;
+      }
+      const result = parseInvoices(rows, cols);
+      state.invoices = result.filtered.map(inv=>({...inv, workers:[]}));
+      state.stats = { ...result.stats, period: findPeriod(rows) };
+      statusEl.style.color = 'var(--good)';
+      statusEl.textContent = '解析成功。';
+      renderStats();
+      renderInvoices();
+      renderSummary();
+    }catch(err){
+      statusEl.style.color = 'var(--danger)';
+      statusEl.textContent = '解析失败：' + err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+function renderStats(){
+  const el = document.getElementById('statsBox');
+  if(!state.stats){ el.innerHTML=''; return; }
+  const s = state.stats;
+  el.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-num">${s.total}</div><div class="stat-label">报表总发票数</div></div>
+      <div class="stat"><div class="stat-num">${s.rawQualify}</div><div class="stat-label">原始金额 ≥RM500</div></div>
+      <div class="stat good"><div class="stat-num">${s.finalQualify}</div><div class="stat-label">扣除 Tyre/Batt 后仍 ≥RM500（计提成）</div></div>
+    </div>
+    <div class="muted" style="margin-top:8px;font-size:12.5px;">报表期间：${escapeHtml(s.period) || '未在文件中找到'}</div>
+  `;
+}
+
+function parseWorkersSheet(rows){
+  const skip = new Set(['name','worker','worker name','no','no.','#','index','employee','staff','staff name','员工','姓名','编号']);
+  const names = []; const seen = new Set();
+  rows.forEach(row=>{
+    (row||[]).forEach(cell=>{
+      const v=(cell||'').toString().trim();
+      if(!v) return;
+      if(/^\d+$/.test(v)) return;
+      if(skip.has(v.toLowerCase())) return;
+      if(!seen.has(v)){ seen.add(v); names.push(v); }
+    });
+  });
+  return names;
+}
+
+document.getElementById('workerFile').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const data = new Uint8Array(evt.target.result);
+      const wb = XLSX.read(data, {type:'array'});
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, defval:''});
+      const names = parseWorkersSheet(rows);
+      let added = 0;
+      names.forEach(n=>{ if(!state.workers.includes(n)){ state.workers.push(n); added++; } });
+      renderWorkers(); renderInvoices();
+      alert('已从 Excel 导入 ' + added + ' 位新员工（共识别 ' + names.length + ' 个名字）。');
+    }catch(err){ alert('员工名单解析失败：' + err.message); }
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value = '';
+});
+
+function addWorker(){
+  const input = document.getElementById('workerInput');
+  const name = input.value.trim();
+  if(!name) return;
+  if(!state.workers.includes(name)) state.workers.push(name);
+  input.value = '';
+  renderWorkers();
+  renderInvoices();
+}
+document.getElementById('addWorkerBtn').addEventListener('click', addWorker);
+document.getElementById('workerInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addWorker(); });
+
+function removeWorker(name){
+  state.workers = state.workers.filter(w=>w!==name);
+  state.invoices.forEach(inv=>{ inv.workers = inv.workers.filter(w=>w!==name); });
+  renderWorkers(); renderInvoices(); renderSummary();
+}
+document.getElementById('workerChips').addEventListener('click', e=>{
+  const btn = e.target.closest('button[data-worker]');
+  if(btn) removeWorker(btn.dataset.worker);
+});
+function renderWorkers(){
+  const el = document.getElementById('workerChips');
+  el.innerHTML = state.workers.map(w=>
+    `<div class="chip">${escapeHtml(w)}<button data-worker="${escapeHtml(w)}" title="移除">×</button></div>`
+  ).join('') || '<span class="muted" style="font-size:12px;">尚未添加员工</span>';
+}
+
+function renderInvoices(){
+  const body = document.getElementById('invoiceBody');
+  const emptyEl = document.getElementById('invoiceEmpty');
+  state.invoices.sort((a,b)=>a.docNo.localeCompare(b.docNo, undefined, {numeric:true}));
+  if(!state.invoices.length){
+    body.innerHTML = '';
+    emptyEl.style.display = 'block';
+    updateProgress();
+    return;
+  }
+  emptyEl.style.display = 'none';
+  body.innerHTML = state.invoices.map((inv,idx)=>{
+    const assigned = inv.workers.length>0;
+    let label = assigned ? escapeHtml(inv.workers.join(', ')) : '未分配';
+    if(inv.workers.length>1) label += ' <span class="muted" style="font-size:11px;">(' + inv.workers.length + '人平分)</span>';
+    return `<tr class="${assigned?'tr-assigned':''}" data-idx="${idx}">
+      <td>${escapeHtml(inv.date)}</td>
+      <td>${escapeHtml(inv.docNo)}</td>
+      <td class="mono">${fmt(inv.debit)}</td>
+      <td class="mono">${fmt(inv.deductTotal)}</td>
+      <td class="mono">${fmt(inv.final)}</td>
+      <td class="mono">${fmt(inv.commission)}</td>
+      <td><button class="assign-btn" data-idx="${idx}">${label}</button>${assigned?'<span class="check">✓</span>':''}</td>
+    </tr>`;
+  }).join('');
+  updateProgress();
+}
+
+function updateProgress(){
+  const total = state.invoices.length;
+  const done = state.invoices.filter(i=>i.workers.length>0).length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = '已分配 ' + done + ' / ' + total + ' 张发票';
+}
+
+let assignTargetIdx = null;
+function openAssign(idx){
+  assignTargetIdx = idx;
+  const inv = state.invoices[idx];
+  const list = document.getElementById('assignList');
+  if(!state.workers.length){
+    list.innerHTML = '<div class="muted">请先在 Step 1b 添加员工。</div>';
+  } else {
+    list.innerHTML = state.workers.map(w=>{
+      const checked = inv.workers.includes(w);
+      return `<label class="assign-item ${checked?'checked':''}"><input type="checkbox" value="${escapeHtml(w)}" ${checked?'checked':''}> ${escapeHtml(w)}</label>`;
+    }).join('');
+  }
+  document.getElementById('assignOverlay').style.display = 'flex';
+}
+function closeAssign(){ document.getElementById('assignOverlay').style.display = 'none'; assignTargetIdx = null; }
+document.getElementById('assignList').addEventListener('change', e=>{
+  const label = e.target.closest('.assign-item');
+  if(label) label.classList.toggle('checked', e.target.checked);
+});
+document.getElementById('assignConfirmBtn').addEventListener('click', ()=>{
+  if(assignTargetIdx===null) return;
+  const checked = [...document.querySelectorAll('#assignList input:checked')].map(i=>i.value);
+  state.invoices[assignTargetIdx].workers = checked;
+  closeAssign();
+  renderInvoices();
+  renderSummary();
+});
+
+document.getElementById('btnAutoAssign').addEventListener('click', ()=>{
+  if(!state.workers.length){ alert('请先在 Step 1b 添加或导入员工名单。'); return; }
+  if(!state.invoices.length){ alert('请先上传发票文件。'); return; }
+  state.invoices.forEach((inv,i)=>{ inv.workers = [state.workers[i % state.workers.length]]; });
+  renderInvoices();
+  renderSummary();
+});
+document.getElementById('invoiceBody').addEventListener('click', e=>{
+  const abtn = e.target.closest('.assign-btn');
+  if(abtn){ openAssign(parseInt(abtn.dataset.idx,10)); return; }
+  const tr = e.target.closest('tr[data-idx]');
+  if(!tr) return;
+  openModal(parseInt(tr.dataset.idx,10));
+});
+
+function openModal(idx){
+  const inv = state.invoices[idx];
+  if(!inv) return;
+  document.getElementById('modalTitle').textContent = inv.docNo + '（' + inv.date + '）';
+  const lines = inv.lines.length ? inv.lines.map(l=>
+    `<div class="line-item ${l.deducted?'deducted':''}"><span>${escapeHtml(l.desc)}${l.deducted?'<span class="tag">已扣除</span>':''}</span><span class="mono">${fmt(l.amount)}</span></div>`
+  ).join('') : '<div class="muted" style="padding:10px 0;">此发票没有明细行数据。</div>';
+  const workerLine = inv.workers.length
+    ? escapeHtml(inv.workers.join('、')) + (inv.workers.length>1 ? '（每人 ' + fmt(inv.commission/inv.workers.length) + '）' : '')
+    : '未分配';
+  document.getElementById('modalBody').innerHTML = `
+    <div>${lines}</div>
+    <div class="calc-box">
+      <div class="calc-row"><span>原始总额 (Debit)</span><span class="mono">${fmt(inv.debit)}</span></div>
+      <div class="calc-row"><span>扣除 Tyre/Battery</span><span class="mono">- ${fmt(inv.deductTotal)}</span></div>
+      <div class="calc-row final"><span>结算金额</span><span class="mono">${fmt(inv.final)}</span></div>
+      <div class="calc-row final"><span>提成</span><span class="mono">${fmt(inv.commission)}</span></div>
+      <div class="calc-row"><span>负责员工</span><span>${workerLine}</span></div>
+    </div>`;
+  document.getElementById('modalOverlay').style.display = 'flex';
+}
+function closeModal(){ document.getElementById('modalOverlay').style.display = 'none'; }
+
+function computeSummary(){
+  const totals = {};
+  state.workers.forEach(w=> totals[w] = 0 );
+  let unassigned = 0;
+  state.invoices.forEach(inv=>{
+    if(inv.workers.length){
+      const share = inv.commission / inv.workers.length;
+      inv.workers.forEach(w=>{ if(totals.hasOwnProperty(w)) totals[w] += share; });
+    } else {
+      unassigned += inv.commission;
+    }
+  });
+  return {totals, unassigned};
+}
+function renderSummary(){
+  const {totals, unassigned} = computeSummary();
+  const el = document.getElementById('summaryList');
+  const entries = Object.entries(totals);
+  let grand = 0;
+  let html = entries.map(([w,t])=>{ grand+=t; return `<div class="summary-row"><span>${escapeHtml(w)}</span><span class="mono">${fmt(t)}</span></div>`; }).join('');
+  if(!entries.length) html = '<div class="muted" style="font-size:13px;">请先添加员工。</div>';
+  if(unassigned>0) html += `<div class="summary-row"><span class="badge-warn">未分配</span><span class="mono badge-warn">${fmt(unassigned)}</span></div>`;
+  html += `<div class="summary-total"><span>合计已分配</span><span class="mono">${fmt(grand)}</span></div>`;
+  el.innerHTML = html;
+}
+
+async function saveFile(filename, blob){
+  if(window.claude && typeof window.claude.use === 'function'){
+    try{
+      const dl = await window.claude.use('downloads');
+      if(dl){
+        await dl.save({filename, data: blob});
+        return;
+      }
+    }catch(err){
+      if(err && err.code === 'declined') return;
+      // fall through to standard browser download for any other outcome
+    }
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+
+function buildExportRows(){
+  const rows = [];
+  state.invoices.forEach(inv=>{
+    if(inv.workers.length){
+      const share = inv.commission / inv.workers.length;
+      inv.workers.forEach(w=>{
+        const label = inv.workers.length>1 ? (w + '（' + inv.workers.length + '人平分）') : w;
+        rows.push({date:inv.date, docNo:inv.docNo, debit:inv.debit, deductTotal:inv.deductTotal, final:inv.final, workerLabel:label, share});
+      });
+    } else {
+      rows.push({date:inv.date, docNo:inv.docNo, debit:inv.debit, deductTotal:inv.deductTotal, final:inv.final, workerLabel:'-', share:inv.commission});
+    }
+  });
+  return rows;
+}
+
+function buildPrintHTML(){
+  const rows = buildExportRows();
+  const today = new Date().toLocaleDateString('en-MY');
+  const detailRows = rows.map(r=>`<tr><td>${escapeHtml(r.date)}</td><td>${escapeHtml(r.docNo)}</td><td>${fmt(r.debit)}</td><td>${fmt(r.deductTotal)}</td><td>${fmt(r.final)}</td><td>${escapeHtml(r.workerLabel)}</td><td>${fmt(r.share)}</td><td class="remarks-col"></td></tr>`).join('');
+  const {totals, unassigned} = computeSummary();
+  const grand = Object.values(totals).reduce((a,b)=>a+b,0);
+  let summaryRows = Object.entries(totals).map(([w,t])=>`<tr><td>${escapeHtml(w)}</td><td>${fmt(t)}</td></tr>`).join('');
+  if(unassigned>0) summaryRows += `<tr><td>未分配 Unassigned</td><td>${fmt(unassigned)}</td></tr>`;
+  summaryRows += `<tr style="font-weight:700;"><td>合计 Total</td><td>${fmt(grand)}</td></tr>`;
+  return `
+    <h2>AutoCount 员工提成报表 - 每日明细 Daily Hit Targets</h2>
+    <div class="meta">生成日期: ${escapeHtml(today)}${state.stats && state.stats.period ? '　报表期间: ' + escapeHtml(state.stats.period) : ''}</div>
+    <table><thead><tr><th>日期</th><th>发票号</th><th>原始总额</th><th>扣除项(Tyre/Batt)</th><th>结算金额</th><th>负责员工</th><th>提成 RM</th><th>Manual Remarks / 扣款备注</th></tr></thead>
+    <tbody>${detailRows}</tbody></table>
+    <div class="page-break">
+      <h2>月度总结 Monthly Summary</h2>
+      <table><thead><tr><th>员工 Worker</th><th>总提成 RM</th></tr></thead><tbody>${summaryRows}</tbody></table>
+    </div>`;
+}
+
+document.getElementById('btnPDF').addEventListener('click', ()=>{
+  if(!state.invoices.length){ alert('没有可导出的达标发票。'); return; }
+  document.getElementById('printArea').innerHTML = buildPrintHTML();
+  window.print();
+});
+
+document.getElementById('btnExcel').addEventListener('click', async ()=>{
+  if(!state.invoices.length){ alert('没有可导出的达标发票。'); return; }
+  const wb = XLSX.utils.book_new();
+  const detailAoa = [['日期','发票号','原始总额','扣除项(Tyre/Batt)','结算金额','负责员工','提成 RM','Manual Remarks / 扣款备注']];
+  buildExportRows().forEach(r=>{ detailAoa.push([r.date, r.docNo, r.debit, r.deductTotal, r.final, r.workerLabel, r.share, '']); });
+  const wsDetail = XLSX.utils.aoa_to_sheet(detailAoa);
+  wsDetail['!cols'] = [{wch:12},{wch:16},{wch:12},{wch:16},{wch:12},{wch:20},{wch:10},{wch:30}];
+  XLSX.utils.book_append_sheet(wb, wsDetail, 'Daily Detail');
+  const {totals, unassigned} = computeSummary();
+  const summaryAoa = [['员工 Worker','总提成 RM']];
+  Object.entries(totals).forEach(([w,t])=> summaryAoa.push([w,t]));
+  if(unassigned>0) summaryAoa.push(['未分配 Unassigned', unassigned]);
+  const grand = Object.values(totals).reduce((a,b)=>a+b,0);
+  summaryAoa.push(['合计 Total', grand]);
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryAoa);
+  wsSummary['!cols'] = [{wch:18},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Monthly Summary');
+  const xlsxArray = XLSX.write(wb, {bookType:'xlsx', type:'array'});
+  const xlsxBlob = new Blob([xlsxArray], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  await saveFile('commission_report.xlsx', xlsxBlob);
+});
+
+renderWorkers();
+renderInvoices();
+renderSummary();
+</script>
+</body>
+</html>
