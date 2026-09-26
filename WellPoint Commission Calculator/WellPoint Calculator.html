@@ -66,6 +66,17 @@ button{
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
 .btn-ghost:hover{background:var(--chip-hover);} /* 替换为悬停专用颜色 */
 label.btn-ghost{display:inline-flex;align-items:center; transition: all 0.2s ease;}
+  /* 新增：日夜反转按钮 */
+.btn-invert {
+  background: var(--text); /* 背景用当前模式的文字颜色（白天黑，夜晚白） */
+  color: var(--bg);        /* 文字用当前模式的背景颜色（白天白，夜晚黑） */
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+.btn-invert:hover {
+  opacity: 0.85; /* 鼠标悬停时稍微透明一点，增加点击反馈 */
+}
 .row-inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
 .chip{background:var(--chip);border:1px solid var(--border);border-radius:999px;padding:6px 11px;font-size:13px;display:flex;align-items:center;gap:6px;}
@@ -185,7 +196,7 @@ tr.tr-assigned .assign-btn{
           <button class="btn-accent" id="addWorkerBtn">新增</button>
         </div>
         <div class="row-inline" style="margin-top:10px;">
-          <label class="btn-ghost" style="font-size: 13px; padding: 7px 15px; border-radius: 8px; gap: 6px; cursor: pointer;">
+          <label class="btn-invert" style="font-size: 13px; padding: 7px 15px; border-radius: 8px; gap: 6px; cursor: pointer;">
             导入员工 Excel
             <input type="file" id="workerFile" accept=".xlsx,.xls" style="display:none;">
           </label>
