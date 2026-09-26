@@ -10,14 +10,31 @@
 :root{
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
   --bg:#f4f5f7;--panel:#ffffff;--text:#161a20;--muted:#68707d;--border:#e2e5ea;
-  --accent:#1f6feb;--accent-text:#ffffff;--danger:#d9364a;--good:#178a4c;--warn:#b8790a;--chip:#eef2f9;
+  --accent:#1f6feb;--accent-text:#ffffff;--danger:#d9364a;--good:#178a4c;--warn:#b8790a;
+  --chip:#eef2f9;
+  /* 新增：用于 Light Mode 悬停反馈及高亮背景 */
+  --chip-hover:#e1e6f0; 
+  --row-assigned: rgba(23, 138, 76, 0.08); 
 }
 *{box-sizing:border-box;}
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;}
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--bg:#0e1013;--panel:#191c22;--text:#e7e9ee;--muted:#9aa1ad;--border:#2c313a;--accent:#4c8dff;--accent-text:#0e1013;--danger:#ff6b7a;--good:#3fd07a;--warn:#ffc451;--chip:#232833;}
+  :root:not([data-theme="light"]){
+    --bg:#0e1013;--panel:#191c22;--text:#e7e9ee;--muted:#9aa1ad;--border:#2c313a;
+    --accent:#4c8dff;--accent-text:#0e1013;--danger:#ff6b7a;--good:#3fd07a;--warn:#ffc451;
+    --chip:#232833;
+    /* 新增：用于 Dark Mode 悬停反馈及高亮背景 */
+    --chip-hover:#2f3646; 
+    --row-assigned: rgba(63, 208, 122, 0.15); 
+  }
 }
-:root[data-theme="dark"]{--bg:#0e1013;--panel:#191c22;--text:#e7e9ee;--muted:#9aa1ad;--border:#2c313a;--accent:#4c8dff;--accent-text:#0e1013;--danger:#ff6b7a;--good:#3fd07a;--warn:#ffc451;--chip:#232833;}
+:root[data-theme="dark"]{
+  --bg:#0e1013;--panel:#191c22;--text:#e7e9ee;--muted:#9aa1ad;--border:#2c313a;
+  --accent:#4c8dff;--accent-text:#0e1013;--danger:#ff6b7a;--good:#3fd07a;--warn:#ffc451;
+  --chip:#232833;
+  --chip-hover:#2f3646;
+  --row-assigned: rgba(63, 208, 122, 0.15);
+}
 body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100%;}
 .wrap{max-width:1200px;margin:0 auto;padding:20px 16px 60px;}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
@@ -41,11 +58,14 @@ h1{font-size:20px;margin:0;}
 .card p.hint{color:var(--muted);font-size:12px;margin:4px 0 10px;}
 input[type=file]{font-size:13px;}
 input[type=text]{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 10px;font-size:14px;}
-button{cursor:pointer;border:none;border-radius:8px;padding:9px 15px;font-size:14px;font-weight:600;}
+button{
+  cursor:pointer;border:none;border-radius:8px;padding:9px 15px;font-size:14px;font-weight:600;
+  transition: all 0.2s ease; /* 增加平滑过渡 */
+}
 .btn-accent{background:var(--accent);color:var(--accent-text);}
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
-.btn-ghost:hover{background:var(--chip);}
-label.btn-ghost{display:inline-flex;align-items:center;}
+.btn-ghost:hover{background:var(--chip-hover);} /* 替换为悬停专用颜色 */
+label.btn-ghost{display:inline-flex;align-items:center; transition: all 0.2s ease;}
 .row-inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
 .chip{background:var(--chip);border:1px solid var(--border);border-radius:999px;padding:6px 11px;font-size:13px;display:flex;align-items:center;gap:6px;}
@@ -62,8 +82,8 @@ th,td{border-bottom:1px solid var(--border);padding:10px 8px;text-align:left;whi
 th{color:var(--muted);font-weight:700;font-size:12px;text-transform:uppercase;background:var(--panel);position:sticky;top:0;z-index:1;}
 .tbl-wrap{overflow:auto;max-height:560px;border:1px solid var(--border);border-radius:10px;}
 tbody tr{cursor:pointer;}
-tbody tr:hover{background:var(--chip);}
-tr.tr-assigned{background:rgba(23,138,76,0.12);}
+tbody tr:hover{background:var(--chip-hover);} /* 提升行悬停的可视性 */
+tr.tr-assigned{background:var(--row-assigned);} /* 使用更适配双端的分配背景色 */
 .check{color:var(--good);font-weight:800;margin-left:6px;font-size:15px;}
 .mono{font-variant-numeric:tabular-nums;}
 .muted{color:var(--muted);}
@@ -83,11 +103,33 @@ footer{color:var(--muted);font-size:11px;text-align:center;margin-top:20px;}
 .calc-box{margin-top:14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
 .calc-row{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;}
 .calc-row.final{font-weight:800;border-top:1px solid var(--border);margin-top:4px;padding-top:8px;}
-.assign-btn{background:var(--bg);border:2px solid var(--accent);border-radius:8px;padding:8px 12px;font-size:14px;font-weight:600;color:var(--text);min-width:160px;text-align:left;white-space:normal;}
-tr.tr-assigned .assign-btn{border-color:var(--good);}
+
+/* 优化分配按钮逻辑：平时较淡，hover时提示，选中后与背景融为一体 */
+.assign-btn{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 12px;
+  font-size:14px;
+  font-weight:600;
+  color:var(--text);
+  min-width:160px;
+  text-align:left;
+  white-space:normal;
+  transition: all 0.2s ease;
+}
+.assign-btn:hover { border-color: var(--accent); }
+tr.tr-assigned .assign-btn{
+  border-color:var(--good);
+  background:transparent;
+}
+
 .assign-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:15px;cursor:pointer;}
 .assign-item input{width:20px;height:20px;flex-shrink:0;}
-.assign-item.checked{background:rgba(23,138,76,0.12);border-color:var(--good);}
+.assign-item.checked{
+  background:var(--row-assigned);
+  border-color:var(--good);
+}
 #printArea{display:none;}
 #printArea table{width:100%;border-collapse:collapse;font-size:11px;color:#111;}
 #printArea th,#printArea td{border:1px solid #999;padding:5px 6px;text-align:left;}
@@ -143,7 +185,8 @@ tr.tr-assigned .assign-btn{border-color:var(--good);}
           <button class="btn-accent" id="addWorkerBtn">新增</button>
         </div>
         <div class="row-inline" style="margin-top:10px;">
-          <label class="btn-ghost" style="color:#0e1013;background:#fff;font-size: 10px; padding:5px 15px;border-radius:8px;gap:6px;">导入员工 Excel
+          <label class="btn-ghost" style="font-size: 13px; padding: 7px 15px; border-radius: 8px; gap: 6px; cursor: pointer;">
+            导入员工 Excel
             <input type="file" id="workerFile" accept=".xlsx,.xls" style="display:none;">
           </label>
           <span class="muted" style="font-size:12px;">可上传保存好的员工名单文件，重复姓名自动去重，之后每次直接用同一个文件即可</span>
