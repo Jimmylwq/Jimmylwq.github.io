@@ -12,7 +12,6 @@
   --bg:#f4f5f7;--panel:#ffffff;--text:#161a20;--muted:#68707d;--border:#e2e5ea;
   --accent:#1f6feb;--accent-text:#ffffff;--danger:#d9364a;--good:#178a4c;--warn:#b8790a;
   --chip:#eef2f9;
-  /* 新增：用于 Light Mode 悬停反馈及高亮背景 */
   --chip-hover:#e1e6f0; 
   --row-assigned: rgba(23, 138, 76, 0.08); 
 }
@@ -23,7 +22,6 @@ html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;}
     --bg:#0e1013;--panel:#191c22;--text:#e7e9ee;--muted:#9aa1ad;--border:#2c313a;
     --accent:#4c8dff;--accent-text:#0e1013;--danger:#ff6b7a;--good:#3fd07a;--warn:#ffc451;
     --chip:#232833;
-    /* 新增：用于 Dark Mode 悬停反馈及高亮背景 */
     --chip-hover:#2f3646; 
     --row-assigned: rgba(63, 208, 122, 0.15); 
   }
@@ -60,23 +58,20 @@ input[type=file]{font-size:13px;}
 input[type=text]{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 10px;font-size:14px;}
 button{
   cursor:pointer;border:none;border-radius:8px;padding:9px 15px;font-size:14px;font-weight:600;
-  transition: all 0.2s ease; /* 增加平滑过渡 */
+  transition: all 0.2s ease;
 }
 .btn-accent{background:var(--accent);color:var(--accent-text);}
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
-.btn-ghost:hover{background:var(--chip-hover);} /* 替换为悬停专用颜色 */
+.btn-ghost:hover{background:var(--chip-hover);} 
 label.btn-ghost{display:inline-flex;align-items:center; transition: all 0.2s ease;}
-  /* 新增：日夜反转按钮 */
 .btn-invert {
-  background: var(--text); /* 背景用当前模式的文字颜色（白天黑，夜晚白） */
-  color: var(--bg);        /* 文字用当前模式的背景颜色（白天白，夜晚黑） */
+  background: var(--text); 
+  color: var(--bg);        
   display: inline-flex;
   align-items: center;
   transition: opacity 0.2s ease;
 }
-.btn-invert:hover {
-  opacity: 0.85; /* 鼠标悬停时稍微透明一点，增加点击反馈 */
-}
+.btn-invert:hover { opacity: 0.85; }
 .row-inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
 .chip{background:var(--chip);border:1px solid var(--border);border-radius:999px;padding:6px 11px;font-size:13px;display:flex;align-items:center;gap:6px;}
@@ -93,8 +88,8 @@ th,td{border-bottom:1px solid var(--border);padding:10px 8px;text-align:left;whi
 th{color:var(--muted);font-weight:700;font-size:12px;text-transform:uppercase;background:var(--panel);position:sticky;top:0;z-index:1;}
 .tbl-wrap{overflow:auto;max-height:560px;border:1px solid var(--border);border-radius:10px;}
 tbody tr{cursor:pointer;}
-tbody tr:hover{background:var(--chip-hover);} /* 提升行悬停的可视性 */
-tr.tr-assigned{background:var(--row-assigned);} /* 使用更适配双端的分配背景色 */
+tbody tr:hover{background:var(--chip-hover);} 
+tr.tr-assigned{background:var(--row-assigned);} 
 .check{color:var(--good);font-weight:800;margin-left:6px;font-size:15px;}
 .mono{font-variant-numeric:tabular-nums;}
 .muted{color:var(--muted);}
@@ -115,7 +110,6 @@ footer{color:var(--muted);font-size:11px;text-align:center;margin-top:20px;}
 .calc-row{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;}
 .calc-row.final{font-weight:800;border-top:1px solid var(--border);margin-top:4px;padding-top:8px;}
 
-/* 优化分配按钮逻辑：平时较淡，hover时提示，选中后与背景融为一体 */
 .assign-btn{
   background:var(--bg);
   border:1px solid var(--border);
@@ -158,25 +152,19 @@ tr.tr-assigned .assign-btn{
 </head>
 <body>
 <div class="wrap">
-  <!-- <header>
-    <div>
-      <h1> WellPoint🔧 Commission Calculator System</h1>
-      <div class="sub">~ 如果刷新页面即清空 ~</div>
-    </div>
-    <button class="btn-ghost" onclick="if(confirm('确定要清空所有数据并重新开始吗？'))location.reload()">重置 / Reset</button>
-  </header> -->
   <header>
     <div class="brand">
       <div class="logo">
-        <!-- 换成你自己的图片路径 / SVG -->
         <img src="https://Jimmylwq.github.io/WellPoint Commission Calculator/WellPointLogo.png" alt="WellPoint Logo">
       </div>
       <div class="brand-text">
         <h1>WellPoint ·  Commission Calculator System💰</h1>
-        <div class="sub">~ 如果刷新页面即清空 ~</div>
+        <!-- UI优化：提示用户数据会自动保存 -->
+        <div class="sub">~ 本地自动保存，刷新不丢失 ~</div>
       </div>
     </div>
-    <button class="btn-ghost" onclick="if(confirm('确定要清空所有数据并重新开始吗？'))location.reload()">重置 / Reset</button>
+    <!-- 功能优化：修改重置按钮绑定的函数 -->
+    <button class="btn-ghost" onclick="resetApp()">重置 / Reset</button>
   </header>
 
   <div class="grid">
@@ -265,7 +253,50 @@ tr.tr-assigned .assign-btn{
 <div id="printArea"></div>
 
 <script>
+// 【代码优化 1】提取业务规则字典，便于未来非技术人员维护
+const CONFIG = {
+  COMMISSION_BASE: 500, // 达标门槛
+  COMMISSION_RATE: 25,  // 提成金额
+  EXCLUDE_KEYWORDS: /(BEARING|FENDER|VALVE|NUT|COVER|LINER|LABOUR|LABOR|BALANC|PATCH|CHANG)/,
+  TYRE_KEYWORD: /TYRE/,
+  BATTERY_KEYWORD: /BATTERY/,
+  BATTERY_EXCLUDE: /(COVER|WATER)/
+};
+
+// 【代码优化 2】LocalStorage 数据持久化
+const STORAGE_KEY = 'wellpoint_commission_state_v1';
 const state = { workers: [], invoices: [], stats: null };
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.warn('LocalStorage 写入失败', e);
+  }
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state.workers = parsed.workers || [];
+      state.invoices = parsed.invoices || [];
+      state.stats = parsed.stats || null;
+      return true;
+    }
+  } catch (e) {
+    console.error('状态恢复失败', e);
+  }
+  return false;
+}
+
+function resetApp() {
+  if (confirm('确定要清空所有数据并重新开始吗？')) {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+}
 
 function parseNum(v){
   if(v===undefined||v===null) return 0;
@@ -273,6 +304,12 @@ function parseNum(v){
   const n = parseFloat(s);
   return isNaN(n) ? 0 : n;
 }
+
+// 【代码优化 3】浮点数安全减法，防止金额精度丢失
+function safeSub(a, b) {
+  return Math.round((a - b) * 100) / 100; 
+}
+
 function fmt(n){ return 'RM ' + (n||0).toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -347,12 +384,14 @@ function findPeriod(rows){
   return '';
 }
 
+// 修改为使用 CONFIG 字典
 function isDeductible(desc){
   const d = (desc||'').toUpperCase();
-  const isBattery = /BATTERY/.test(d) && !/(COVER|WATER)/.test(d);
-  const isTyre = /TYRE/.test(d) && /\d/.test(d) && !/(BEARING|FENDER|VALVE|NUT|COVER|LINER|LABOUR|LABOR|BALANC|PATCH|CHANG)/.test(d);
+  const isBattery = CONFIG.BATTERY_KEYWORD.test(d) && !CONFIG.BATTERY_EXCLUDE.test(d);
+  const isTyre = CONFIG.TYRE_KEYWORD.test(d) && /\d/.test(d) && !CONFIG.EXCLUDE_KEYWORDS.test(d);
   return isBattery || isTyre;
 }
+
 function parseInvoices(rows, cols){
   const all = [];
   let current = null;
@@ -374,14 +413,15 @@ function parseInvoices(rows, cols){
   }
   const withCalc = all.map(inv=>{
     const deductTotal = inv.lines.filter(l=>l.deducted).reduce((s,l)=>s+l.amount,0);
-    const final = inv.debit - deductTotal;
-    const commission = Math.floor(final/500)*25;
+    // 使用 safeSub 防止浮点数精度丢失
+    const final = safeSub(inv.debit, deductTotal);
+    const commission = Math.floor(final / CONFIG.COMMISSION_BASE) * CONFIG.COMMISSION_RATE;
     return {...inv, deductTotal, final, commission};
   });
   withCalc.sort((a,b)=>a.docNo.localeCompare(b.docNo, undefined, {numeric:true}));
   const total = withCalc.length;
-  const rawQualify = withCalc.filter(i=>i.debit>=500).length;
-  const filtered = withCalc.filter(i=>i.final>=500);
+  const rawQualify = withCalc.filter(i=>i.debit>=CONFIG.COMMISSION_BASE).length;
+  const filtered = withCalc.filter(i=>i.final>=CONFIG.COMMISSION_BASE);
   return { all: withCalc, filtered, stats: { total, rawQualify, finalQualify: filtered.length } };
 }
 
@@ -407,6 +447,9 @@ document.getElementById('fileInput').addEventListener('change', function(e){
       const result = parseInvoices(rows, cols);
       state.invoices = result.filtered.map(inv=>({...inv, workers:[]}));
       state.stats = { ...result.stats, period: findPeriod(rows) };
+      
+      saveState(); // 持久化
+      
       statusEl.style.color = 'var(--good)';
       statusEl.textContent = '解析成功。';
       renderStats();
@@ -427,8 +470,8 @@ function renderStats(){
   el.innerHTML = `
     <div class="stats-grid">
       <div class="stat"><div class="stat-num">${s.total}</div><div class="stat-label">报表总发票数</div></div>
-      <div class="stat"><div class="stat-num">${s.rawQualify}</div><div class="stat-label">原始金额 ≥RM500</div></div>
-      <div class="stat good"><div class="stat-num">${s.finalQualify}</div><div class="stat-label">扣除 Tyre/Batt 后仍 ≥RM500（计提成）</div></div>
+      <div class="stat"><div class="stat-num">${s.rawQualify}</div><div class="stat-label">原始金额 ≥RM${CONFIG.COMMISSION_BASE}</div></div>
+      <div class="stat good"><div class="stat-num">${s.finalQualify}</div><div class="stat-label">扣除 Tyre/Batt 后仍 ≥RM${CONFIG.COMMISSION_BASE}（计提成）</div></div>
     </div>
     <div class="muted" style="margin-top:8px;font-size:12.5px;">报表期间：${escapeHtml(s.period) || '未在文件中找到'}</div>
   `;
@@ -443,7 +486,9 @@ function parseWorkersSheet(rows){
       if(!v) return;
       if(/^\d+$/.test(v)) return;
       if(skip.has(v.toLowerCase())) return;
-      if(!seen.has(v)){ seen.add(v); names.push(v); }
+      // 【代码优化 4】大小写去重
+      const upperV = v.toUpperCase();
+      if(!seen.has(upperV)){ seen.add(upperV); names.push(v); }
     });
   });
   return names;
@@ -461,8 +506,13 @@ document.getElementById('workerFile').addEventListener('change', function(e){
       const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, defval:''});
       const names = parseWorkersSheet(rows);
       let added = 0;
-      names.forEach(n=>{ if(!state.workers.includes(n)){ state.workers.push(n); added++; } });
-      renderWorkers(); renderInvoices();
+      names.forEach(n=>{ 
+        if(!state.workers.some(w => w.toUpperCase() === n.toUpperCase())){ 
+          state.workers.push(n); added++; 
+        } 
+      });
+      saveState(); // 持久化
+      renderWorkers(); renderInvoices(); renderSummary();
       alert('已从 Excel 导入 ' + added + ' 位新员工（共识别 ' + names.length + ' 个名字）。');
     }catch(err){ alert('员工名单解析失败：' + err.message); }
   };
@@ -474,10 +524,16 @@ function addWorker(){
   const input = document.getElementById('workerInput');
   const name = input.value.trim();
   if(!name) return;
-  if(!state.workers.includes(name)) state.workers.push(name);
+  
+  // 大小写去重
+  if(!state.workers.some(w => w.toUpperCase() === name.toUpperCase())) {
+    state.workers.push(name);
+    saveState(); // 持久化
+  }
   input.value = '';
   renderWorkers();
   renderInvoices();
+  renderSummary();
 }
 document.getElementById('addWorkerBtn').addEventListener('click', addWorker);
 document.getElementById('workerInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addWorker(); });
@@ -485,6 +541,7 @@ document.getElementById('workerInput').addEventListener('keydown', e=>{ if(e.key
 function removeWorker(name){
   state.workers = state.workers.filter(w=>w!==name);
   state.invoices.forEach(inv=>{ inv.workers = inv.workers.filter(w=>w!==name); });
+  saveState(); // 持久化
   renderWorkers(); renderInvoices(); renderSummary();
 }
 document.getElementById('workerChips').addEventListener('click', e=>{
@@ -550,16 +607,43 @@ function openAssign(idx){
   document.getElementById('assignOverlay').style.display = 'flex';
 }
 function closeAssign(){ document.getElementById('assignOverlay').style.display = 'none'; assignTargetIdx = null; }
+
 document.getElementById('assignList').addEventListener('change', e=>{
   const label = e.target.closest('.assign-item');
   if(label) label.classList.toggle('checked', e.target.checked);
 });
+
+// 【代码优化 5】DOM 局部更新，解决数据量大时的重绘卡顿
 document.getElementById('assignConfirmBtn').addEventListener('click', ()=>{
   if(assignTargetIdx===null) return;
   const checked = [...document.querySelectorAll('#assignList input:checked')].map(i=>i.value);
-  state.invoices[assignTargetIdx].workers = checked;
+  const currentIdx = assignTargetIdx;
+  
+  state.invoices[currentIdx].workers = checked;
+  saveState(); // 持久化
   closeAssign();
-  renderInvoices();
+  
+  // 仅针对修改的那一行进行 O(1) 的局部 DOM 更新
+  const tr = document.querySelector(`tr[data-idx="${currentIdx}"]`);
+  if(tr) {
+    const assigned = checked.length > 0;
+    tr.classList.toggle('tr-assigned', assigned);
+    
+    let label = assigned ? escapeHtml(checked.join(', ')) : '未分配';
+    if(checked.length > 1) label += ` <span class="muted" style="font-size:11px;">(${checked.length}人平分)</span>`;
+    
+    const btn = tr.querySelector('.assign-btn');
+    btn.innerHTML = label;
+    
+    let checkSpan = tr.querySelector('.check');
+    if (assigned && !checkSpan) {
+        btn.insertAdjacentHTML('afterend', '<span class="check">✓</span>');
+    } else if (!assigned && checkSpan) {
+        checkSpan.remove();
+    }
+  }
+  
+  updateProgress();
   renderSummary();
 });
 
@@ -567,9 +651,11 @@ document.getElementById('btnAutoAssign').addEventListener('click', ()=>{
   if(!state.workers.length){ alert('请先在 Step 1b 添加或导入员工名单。'); return; }
   if(!state.invoices.length){ alert('请先上传发票文件。'); return; }
   state.invoices.forEach((inv,i)=>{ inv.workers = [state.workers[i % state.workers.length]]; });
+  saveState(); // 持久化
   renderInvoices();
   renderSummary();
 });
+
 document.getElementById('invoiceBody').addEventListener('click', e=>{
   const abtn = e.target.closest('.assign-btn');
   if(abtn){ openAssign(parseInt(abtn.dataset.idx,10)); return; }
@@ -637,7 +723,6 @@ async function saveFile(filename, blob){
       }
     }catch(err){
       if(err && err.code === 'declined') return;
-      // fall through to standard browser download for any other outcome
     }
   }
   const url = URL.createObjectURL(blob);
@@ -674,7 +759,7 @@ function buildPrintHTML(){
   summaryRows += `<tr style="font-weight:700;"><td>合计 Total</td><td>${fmt(grand)}</td></tr>`;
   return `
     <h2>AutoCount 员工提成报表 - 每日明细 Daily Hit Targets</h2>
-    <div class="meta">生成日期: ${escapeHtml(today)}${state.stats && state.stats.period ? '　报表期间: ' + escapeHtml(state.stats.period) : ''}</div>
+    <div class="meta">生成日期: ${escapeHtml(today)}${state.stats && state.stats.period ? ' 报表期间: ' + escapeHtml(state.stats.period) : ''}</div>
     <table><thead><tr><th>日期</th><th>发票号</th><th>原始总额</th><th>扣除项(Tyre/Batt)</th><th>结算金额</th><th>负责员工</th><th>提成 RM</th><th>Manual Remarks / 扣款备注</th></tr></thead>
     <tbody>${detailRows}</tbody></table>
     <div class="page-break">
@@ -711,19 +796,16 @@ document.getElementById('btnExcel').addEventListener('click', async ()=>{
   await saveFile('commission_report.xlsx', xlsxBlob);
 });
 
-renderWorkers();
-renderInvoices();
-renderSummary();
-
-  // —— 离开页面前提醒 ——
-window.addEventListener('beforeunload', function(e){
-  const hasWork = state.invoices.length > 0
-               || state.workers.length > 0;
-  if(!hasWork) return;          // 什么都没做，不拦
-  e.preventDefault();
-  e.returnValue = '';           // 现代浏览器需要这句才会弹
-  return '';                    // 老浏览器兼容
+// 【初始化】页面加载时尝试读取本地缓存数据
+document.addEventListener('DOMContentLoaded', () => {
+  loadState(); // 如果有数据会自动恢复
+  renderWorkers();
+  if (state.stats) renderStats();
+  renderInvoices();
+  renderSummary();
 });
+
+// 移除了 beforeunload 弹窗提示，因为现在数据已经由 LocalStorage 自动安全保存了
 </script>
 </body>
 </html>
