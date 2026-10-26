@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>弹球对决</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:#000;color:#eee;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;display:flex;flex-direction:column;align-items:center;padding:10px}
+canvas{width:100%;max-width:520px;aspect-ratio:1;border:2px solid #444;background:#000}
+button,select{margin:8px 4px;padding:10px 16px;font-size:16px;border-radius:8px;border:0;background:#fff;color:#000}
+#bets{display:none}
+#log{font-size:14px;color:#aaa;text-align:center;min-height:40px}
+</style></head><body>
+<canvas id="c" width="400" height="400"></canvas>
+<div><select id="s0"></select><select id="s1"></select></div>
+<div><button id="b">抽选对手</button><span id="ctl" style="display:none"><button id="pz">暂停</button><button id="rs">重新开始</button></span><span id="bets"><button id="bt0"></button><button id="bt1"></button></span></div>
+<div id="log"></div>
+<script>
+const cv=document.getElementById('c'),g=cv.getContext('2d'),S=400,R=34,$=id=>document.getElementById(id);
+let AC;
+function snd(f,d,t,v,f2){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),a=AC.createGain(),n=AC.currentTime;o.type=t;o.frequency.setValueAtTime(f,n);if(f2)o.frequency.exponentialRampToValueAtTime(f2,n+d);a.gain.setValueAtTime(v,n);a.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(a).connect(AC.destination);o.start();o.stop(n+d)}catch(e){}}
+const rnd=(a,b)=>a+Math.random()*(b-a),dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+let paused=false,balls=[],ps=[],fx=[],zones=[],rocks=[],mines=[],run=false,over=null,bet=-1,W=0,L=0,streak=0;
+const opp=o=>balls[0]===o?balls[1]:balls[0];
+function burst(x,y,c,n=8,s=150){for(let i=0;i<n;i++)fx.push({x,y,vx:rnd(-s,s),vy:rnd(-s,s),t:.4,c})}
+function shoot(o,e,k,dmg,col,r,sp,slow){const a=Math.atan2(e.y-o.y,e.x-o.x);ps.push({x:o.x,y:o.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,o,k,dmg,col,r,slow,life:6})}
+function endDash(b){b.dash=0;const s=Math.hypot(b.vx,b.vy)||1;b.vx*=220/s;b.vy*=220/s}
+// 每个英雄都有伤害来源；base=技能间隔(秒)，越难命中间隔越长
+const H=[
+{n:'钩子',col:'#ff9f43',base:4.5,fire(o){if(ps.some(p=>p.k==='hook'&&p.o===o))return;const a=rnd(0,6.28);ps.push({x:o.x,y:o.y,vx:Math.cos(a)*340,vy:Math.sin(a)*340,o,k:'hook',col:'#ffcc88',r:9,life:Infinity,pts:[{x:o.x,y:o.y}]});snd(500,.3,'sawtooth',.15,200)}},
+{n:'领域',col:'#a55eea',base:6,fire(o){zones.push({x:o.x,y:o.y,r:105,t:4,o,tk:0});snd(150,.6,'sine',.25,400)}},
+{n:'石墙',col:'#9aa0aa',base:5,fire(o){for(let i=0;i<4;i++)rocks.push({x:rnd(50,S-50),y:rnd(50,S-50),r:24,t:5,o});snd(80,.3,'square',.3,40)}},
+{n:'治疗',col:'#2ed573',base:3.5,fire(o,e){o.hp=Math.min(100,o.hp+8);burst(o.x,o.y,'#2ed573',14,120);shoot(o,e,'bolt',6,'#9f9',8,300);snd(600,.4,'sine',.2,1000)}},
+{n:'冲锋',col:'#ff4757',base:4,fire(o,e){const d=dist(o,e)||1;o.vx=(e.x-o.x)/d*650;o.vy=(e.y-o.y)/d*650;o.dash=.45;snd(200,.3,'sawtooth',.2,800)}},
+{n:'地雷',col:'#eccc68',base:4,fire(o){mines.push({x:o.x,y:o.y,r:12,t:10,o,arm:.6});snd(300,.1,'square',.15)}},
+{n:'吸血',col:'#e0245e',base:999,leech:1,fire(){}},
+{n:'冰冻',col:'#48dbfb',base:3,fire(o,e){shoot(o,e,'ice',7,'#bff',7,320,1);snd(900,.2,'triangle',.15,400)}}
+];
+[$('s0'),$('s1')].forEach(s=>{s.innerHTML='<option value="-1">🎲 随机</option>'+H.map((h,i)=>`<option value="${i}">${h.n}</option>`).join('')});
+function init(){
+ let a=+$('s0').value,b=+$('s1').value;
+ if(a<0)a=Math.floor(rnd(0,H.length));
+ if(b<0){do b=Math.floor(rnd(0,H.length));while(b===a)}
+ balls=[a,b].map((hi,i)=>{const d=H[hi],an=rnd(0,6.28),s=rnd(160,210);return{d,col:i&&a===b?'#fff':d.col,x:i?290:110,y:rnd(120,280),vx:Math.cos(an)*s,vy:Math.sin(an)*s,hp:100,cd:rnd(1,d.base),slow:0,dash:0,rc:0,fl:0,leech:0,lc:0,lk:0,dp:null,di:0,dtk:0}});
+ ps=[];fx=[];zones=[];rocks=[];mines=[];over=null;run=false;
+}
+function hit(b,dmg,x,y){b.hp=Math.max(0,b.hp-dmg);b.fl=.15;snd(120,.15,'square',.25,60);burst(x,y,b.col)}
+function drag(b,dt){
+ let d=b.dsp*dt;
+ while(d>0&&b.di>=0){const t=b.dp[b.di],dd=Math.hypot(t.x-b.x,t.y-b.y);if(dd<=d){b.x=t.x;b.y=t.y;d-=dd;b.di--}else{b.x+=(t.x-b.x)/dd*d;b.y+=(t.y-b.y)/dd*d;d=0}}
+ b.dtk-=dt;while(b.dtk<=0){b.hp=Math.max(0,b.hp-1);b.dtk+=.1;b.fl=.06;snd(350,.04,'square',.1);burst(b.x,b.y,'#ffcc88',2,80)}
+ if(b.di<0){b.dp=null;const a=rnd(0,6.28);b.vx=Math.cos(a)*200;b.vy=Math.sin(a)*200}
+}
+function step(dt){
+ for(const b of balls){
+  b.fl-=dt;b.rc-=dt;b.slow-=dt;
+  b.lc-=dt;if(b.leech>0)continue;
+  if(b.dp){drag(b,dt);continue}
+  const m=b.slow>0?.5:1;b.x+=b.vx*dt*m;b.y+=b.vy*dt*m;
+  let w=0;if(b.x<R){b.x=R;b.vx=Math.abs(b.vx);w=1}if(b.x>S-R){b.x=S-R;b.vx=-Math.abs(b.vx);w=1}
+  if(b.y<R){b.y=R;b.vy=Math.abs(b.vy);w=1}if(b.y>S-R){b.y=S-R;b.vy=-Math.abs(b.vy);w=1}
+  if(w)snd(220,.08,'sine',.15);
+  if(b.dash>0){b.dash-=dt;if(b.dash<=0)endDash(b)}
+  b.cd-=dt;if(b.cd<=0){b.d.fire(b,opp(b));b.cd=b.d.base*rnd(.6,1.4)}
+ }
+ const[a,b]=balls,dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||1;
+ if(d<2*R&&!a.dp&&!b.dp&&!(a.leech>0||b.leech>0)){const nx=dx/d,ny=dy/d,rv=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+  if(rv<0){a.vx+=rv*nx;a.vy+=rv*ny;b.vx-=rv*nx;b.vy-=rv*ny;snd(140,.12,'triangle',.3);
+   const cdm=Math.min(5,Math.max(1.5,-rv/70));hit(a,cdm,a.x,a.y);hit(b,cdm,b.x,b.y);for(const v of[a,b])if(v.d.leech&&v.lc<=0){v.leech=3;v.lk=0}
+   const ad=a.dash>0,bd=b.dash>0;if(ad){hit(b,14,b.x,b.y);endDash(a)}if(bd){hit(a,14,a.x,a.y);endDash(b)}}
+  const ov=(2*R-d)/2;a.x-=nx*ov;a.y-=ny*ov;b.x+=nx*ov;b.y+=ny*ov}
+ for(const v of balls){if(v.leech>0){const e=opp(v),dx=v.x-e.x,dy=v.y-e.y,d=Math.hypot(dx,dy)||1,nx=dx/d,ny=dy/d;
+  v.x=Math.max(R,Math.min(S-R,e.x+nx*2*R));v.y=Math.max(R,Math.min(S-R,e.y+ny*2*R));v.vx=e.vx;v.vy=e.vy;
+  e.hp=Math.max(0,e.hp-6*dt);v.hp=Math.min(100,v.hp+6*dt);v.leech-=dt;v.lk-=dt;
+  if(v.lk<=0){v.lk=.3;snd(200,.1,'sawtooth',.12,100);e.fl=.1;burst(e.x,e.y,'#e0245e',2,80)}
+  if(v.leech<=0){v.lc=1.5;v.vx=nx*260;v.vy=ny*260;e.vx=-nx*260;e.vy=-ny*260}}}
+ for(const p of ps){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;const t=opp(p.o);
+  if(p.k==='hook'){let w=0;if(p.x<0||p.x>S){p.vx=-p.vx;p.x=Math.max(0,Math.min(S,p.x));w=1}if(p.y<0||p.y>S){p.vy=-p.vy;p.y=Math.max(0,Math.min(S,p.y));w=1}
+   if(w){p.pts.push({x:p.x,y:p.y});const j=rnd(-.4,.4),c=Math.cos(j),s=Math.sin(j);[p.vx,p.vy]=[p.vx*c-p.vy*s,p.vx*s+p.vy*c];snd(400,.05,'triangle',.1)}
+   if(!t.dp&&dist(t,p)<R+p.r){endDash(t);t.dp=p.pts.slice();t.di=t.dp.length-1;t.dtk=0;let len=0,q=t;for(let i=t.di;i>=0;i--){len+=Math.hypot(t.dp[i].x-q.x,t.dp[i].y-q.y);q=t.dp[i]}t.dsp=Math.max(260,len/3);p.life=0;snd(700,.2,'sawtooth',.2,300)}}
+  else{if(p.x<0||p.x>S||p.y<0||p.y>S)p.life=0;
+   if(dist(t,p)<R+p.r){hit(t,p.dmg,p.x,p.y);endDash(t);if(p.slow)t.slow=3;if(p.k==='bat'){p.o.hp=Math.min(100,p.o.hp+p.dmg);burst(p.o.x,p.o.y,'#ff5c8a',8,100)}p.life=0}}}
+ ps=ps.filter(p=>p.life>0);
+ for(const z of zones){z.t-=dt;z.tk-=dt;const e=opp(z.o);if(dist(e,z)<z.r+R*.5){e.hp=Math.max(0,e.hp-7*dt);e.slow=Math.max(e.slow,.2);if(z.tk<=0){snd(100,.1,'sawtooth',.12);z.tk=.5;e.fl=.1}}}
+ for(const r of rocks){r.t-=dt;for(const x of balls){if(x.dp)continue;const dd=dist(x,r);if(dd<r.r+R){const nx=(x.x-r.x)/dd,ny=(x.y-r.y)/dd;x.x=r.x+nx*(r.r+R);x.y=r.y+ny*(r.r+R);
+   const dot=x.vx*nx+x.vy*ny;if(dot<0){x.vx-=2*dot*nx;x.vy-=2*dot*ny}snd(90,.1,'square',.2);
+   if(x!==r.o&&x.rc<=0){hit(x,6,x.x,x.y);x.rc=.4}}}}
+ for(const m of mines){m.t-=dt;m.arm-=dt;const e=opp(m.o);if(m.arm<=0&&dist(e,m)<R+m.r){hit(e,20,m.x,m.y);burst(m.x,m.y,'#eccc68',20,250);snd(60,.4,'sawtooth',.4,30);m.t=0}}
+ zones=zones.filter(z=>z.t>0);rocks=rocks.filter(r=>r.t>0);mines=mines.filter(m=>m.t>0);
+ for(const f of fx){f.x+=f.vx*dt;f.y+=f.vy*dt;f.t-=dt}fx=fx.filter(f=>f.t>0);
+ for(const x of balls){const s=Math.hypot(x.vx,x.vy),mx=x.dash>0?900:340;if(s>mx){x.vx*=mx/s;x.vy*=mx/s}}
+ const dead=balls.find(x=>x.hp<=0);
+ if(dead){over=opp(dead);run=false;snd(500,.8,'sawtooth',.25,60);const win=balls.indexOf(over)===bet;
+  if(win){W++;streak++}else{L++;streak=0}
+  $('log').innerHTML=(win?'✅ 押中了！':'❌ 押错了…')+' 🏆 '+over.d.n+' 获胜<br>胜 '+W+' ｜ 负 '+L+' ｜ 连胜 '+streak;
+  $('b').textContent='下一局';$('b').style.display='';$('ctl').style.display='none'}
+}
+function rope(pts,end){g.strokeStyle='#ffcc88';g.lineWidth=2;g.beginPath();g.moveTo(pts[0].x,pts[0].y);for(const q of pts)g.lineTo(q.x,q.y);g.lineTo(end.x,end.y);g.stroke()}
+function draw(){
+ g.fillStyle='#000';g.fillRect(0,0,S,S);
+ for(const z of zones){g.fillStyle='rgba(165,94,234,.22)';g.strokeStyle='#a55eea';g.lineWidth=2;g.beginPath();g.arc(z.x,z.y,z.r,0,7);g.fill();g.stroke()}
+ for(const r of rocks){g.fillStyle='#777';g.strokeStyle='#bbb';g.lineWidth=2;g.beginPath();g.arc(r.x,r.y,r.r,0,7);g.fill();g.stroke()}
+ for(const m of mines){g.fillStyle=m.arm>0?'#665':'#eccc68';g.beginPath();g.arc(m.x,m.y,m.r,0,7);g.fill()}
+ for(const p of ps){if(p.k==='hook')rope(p.pts,p);g.fillStyle=p.col;g.beginPath();g.arc(p.x,p.y,p.r,0,7);g.fill()}
+ for(const b of balls)if(b.leech>0){const e=opp(b);g.strokeStyle='#ff5c8a';g.lineWidth=6;g.beginPath();g.moveTo(b.x,b.y);g.lineTo(e.x,e.y);g.stroke()}
+ for(const b of balls){if(b.dp)rope(b.dp.slice(0,b.di+1),b);
+  g.fillStyle=b.fl>0?'#fff':b.col;g.beginPath();g.arc(b.x,b.y,R,0,7);g.fill();
+  if(b.slow>0){g.strokeStyle='#48dbfb';g.lineWidth=3;g.beginPath();g.arc(b.x,b.y,R+3,0,7);g.stroke()}
+  g.strokeStyle='#000';g.lineWidth=4;g.beginPath();g.arc(b.x,b.y,R-6,-1.57,-1.57+6.28*b.hp/100);g.stroke();
+  g.fillStyle='#000';g.textAlign='center';g.font='11px sans-serif';g.fillText(b.d.n,b.x,b.y-8);g.font='bold 22px sans-serif';g.fillText(Math.ceil(b.hp),b.x,b.y+14)}
+ for(const f of fx){g.globalAlpha=Math.max(0,f.t*2.5);g.fillStyle=f.c;g.fillRect(f.x,f.y,4,4)}g.globalAlpha=1;
+ if(paused){g.textAlign='center';g.fillStyle='#fff';g.font='bold 22px sans-serif';g.fillText('⏸ 已暂停',S/2,S/2)}
+ if(over){g.textAlign='center';g.fillStyle='#fff';g.font='bold 22px sans-serif';g.fillText('🏆 '+over.d.n+' 获胜',S/2,S/2)}
+}
+let last=0;
+function loop(t){const dt=Math.min((t-last)/1000,.03);last=t;if(run&&!paused)step(dt);draw();requestAnimationFrame(loop)}
+function go(i){bet=i;run=true;paused=false;$('pz').textContent='暂停';$('ctl').style.display='inline';$('bets').style.display='none';$('log').textContent='押注：'+balls[i].d.n+'　开打！';snd(600,.1,'sine',.2)}
+function newRound(){init();paused=false;run=false;$('ctl').style.display='none';$('b').style.display='none';$('bets').style.display='inline';
+ $('bt0').textContent='押 '+balls[0].d.n;$('bt1').textContent='押 '+balls[1].d.n;$('log').textContent=balls[0].d.n+'  VS  '+balls[1].d.n+'　你押谁赢？'}
+$('b').onclick=newRound;$('rs').onclick=newRound;
+$('pz').onclick=()=>{paused=!paused;$('pz').textContent=paused?'继续':'暂停'};
+$('bt0').onclick=()=>go(0);$('bt1').onclick=()=>go(1);
+init();requestAnimationFrame(loop);
+</script></body></html>
