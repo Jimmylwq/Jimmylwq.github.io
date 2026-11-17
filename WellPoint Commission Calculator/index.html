@@ -331,8 +331,8 @@ const CONFIG = {
 // 到 Supabase 控制台 → Project Settings → API，复制 Project URL 和 anon / publishable key 填在下面。
 // 只能填 anon / publishable key，绝对不要填 service_role key！
 // 没填（保持 YOUR- 开头）时，系统会自动退回纯本地模式，照常使用。
-const SUPABASE_URL = 'https://YOUR-PROJECT-ID.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR-ANON-OR-PUBLISHABLE-KEY';
+const SUPABASE_URL = 'https://yumywzmetbmtsiewerhx.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_7BilXA5GUZPicrmm07TOsQ_lLW9Befe';
 const CLOUD_ON = !!window.supabase && /^https:\/\/\S+$/i.test(SUPABASE_URL) && !/YOUR-/i.test(SUPABASE_URL + SUPABASE_ANON_KEY);
 const sb = CLOUD_ON ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 let currentUser = null;
